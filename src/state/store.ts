@@ -4,10 +4,14 @@ import { createWrapper, HYDRATE } from 'next-redux-wrapper'
 
 // Slices
 import { appViewSlice } from './appViewSlice'
+import { vehiclesApi } from '../services/vehicles.service'
 
 const makeStore = () =>
   configureStore({
     reducer: {
+      // Services RTK Query
+      [vehiclesApi.reducerPath]: vehiclesApi.reducer,
+      // Slices
       [appViewSlice.name]: appViewSlice.reducer,
     },
     devTools: true,
