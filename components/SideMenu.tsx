@@ -10,13 +10,13 @@ import {
 import { SVGProps } from 'react'
 import { useRouter } from 'next/router'
 
-type MenuItem = {
+type IMenuItem = {
   title: string
   icon: (props: SVGProps<SVGSVGElement>) => JSX.Element
   link: string
   counter?: number
 }
-const MenuItem = (item: MenuItem) => {
+const MenuItem = (item: IMenuItem) => {
   const router = useRouter()
   const Icon = item.icon
   const isActive = router.asPath === item.link
