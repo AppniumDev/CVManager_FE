@@ -2,12 +2,12 @@ import type { NextPage } from "next";
 import { BaseLayout } from "../components/BaseLayout";
 import styles from "../styles/Home.module.css";
 
-const Home: NextPage = () => {
+const Veicoli: NextPage = () => {
   return (
     <BaseLayout>
-      <h1>Homepage</h1>
+      <h1>Veicoli</h1>
     </BaseLayout>
   );
 };
 
-export default Home;
+export default Veicoli;

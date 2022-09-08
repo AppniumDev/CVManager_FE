@@ -1,15 +1,22 @@
 import { SideMenu } from "./SideMenu";
+import Head from "next/head";
 
 const BaseLayout = ({ children }: any) => {
   return (
     <>
-      <div className="flex flex-no-wrap">
+      <Head>
+        <title>Cuccato Veicoli Manager</title>
+        <meta name="description" content="Cuccato Veicoli Manager" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div className="flex flex-no-wrap bg-gray-200">
         {/* Sidebar starts */}
 
         <SideMenu />
 
-        <div className="container mx-auto py-10 h-64 md:w-4/5 w-11/12 px-6">
-          <div className="w-full h-full rounded border-dashed border-2 border-gray-300">
+        <div className="container w-11/12 h-64 px-6 py-10 mx-auto md:w-4/5">
+          <div className="w-full h-full border border-gray-300 border-dashed rounded ">
             {children}
           </div>
         </div>
