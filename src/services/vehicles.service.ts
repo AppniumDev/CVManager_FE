@@ -5,7 +5,7 @@ export const vehiclesApi = createApi({
   reducerPath: 'vehiclesApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4000' }),
   endpoints: (builder) => ({
-    getAllVehicles: builder.query<VehicleEntity, void>({
+    getAllVehicles: builder.query<VehicleEntity[], void>({
       query: () => ({
         url: '/vehicles',
       }),

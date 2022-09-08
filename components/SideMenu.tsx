@@ -53,15 +53,18 @@ const MenuItem = (item: IMenuItem) => {
 const SideMenu = () => {
   return (
     <div className="absolute flex flex-col justify-between w-64 min-h-screen bg-white shadow sm:relative md:h-full">
-      <div className="px-8">
+      <div className="flex flex-col px-8">
         <div className="flex items-center w-full h-32">
           <Image
             src={logoCV}
             alt="Logo"
             width={200}
-            height={180}
+            height={80}
             // blurDataURL="data:..." automatically provided
           />
+        </div>
+        <div className="flex flex-col items-center">
+          <h1 className="text-lg font-bold text-gray-800">CV Manager</h1>
         </div>
         <ul className="mt-12">
           <MenuItem title="Home" icon={TruckIcon} link="/" />

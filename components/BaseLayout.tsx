@@ -1,5 +1,6 @@
-import { SideMenu } from "./SideMenu";
-import Head from "next/head";
+import { SideMenu } from './SideMenu'
+import Head from 'next/head'
+import { HeaderTop } from './HeaderTop'
 
 const BaseLayout = ({ children }: any) => {
   return (
@@ -15,14 +16,16 @@ const BaseLayout = ({ children }: any) => {
 
         <SideMenu />
 
-        <div className="container w-11/12 h-64 px-6 py-10 mx-auto md:w-4/5">
-          <div className="w-full h-full border border-gray-300 border-dashed rounded ">
+        <div className="flex flex-col w-full h-screen overflow-y-auto">
+          <HeaderTop />
+
+          <div className="container w-11/12 h-64 px-6 py-10 mx-auto md:w-4/5">
             {children}
           </div>
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export { BaseLayout };
+export { BaseLayout }
