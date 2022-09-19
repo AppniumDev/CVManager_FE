@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { BaseLayout } from '../../components/BaseLayout'
+import { BaseLayout } from '../../components/Layout/BaseLayout'
 
 const VeicoliDetailPage = () => {
   const router = useRouter()

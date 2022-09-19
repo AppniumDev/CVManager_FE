@@ -34,13 +34,13 @@ const TableComponent = <T extends unknown>(options: ITableComponent<T>) => {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr
               key={headerGroup.id}
-              className="w-full h-20 text-sm leading-none text-gray-600"
+              className="w-full h-20 text-sm leading-none text-gray-600 border border-b"
             >
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
                   colSpan={header.colSpan}
-                  className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  className="px-6 py-2 text-sm font-bold tracking-wider text-left text-gray-700 uppercase"
                 >
                   {header.isPlaceholder ? null : (
                     <div>
@@ -49,7 +49,7 @@ const TableComponent = <T extends unknown>(options: ITableComponent<T>) => {
                         header.getContext()
                       )}
                       {header.column.getCanFilter() ? (
-                        <div>
+                        <div className="mt-2">
                           <TableFilter column={header.column} table={table} />
                         </div>
                       ) : null}
@@ -64,7 +64,7 @@ const TableComponent = <T extends unknown>(options: ITableComponent<T>) => {
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className="h-20 text-sm leading-none text-gray-700 bg-white border-b border-gray-200 hover:bg-blue-200 hover:cursor-pointer"
+              className="h-12 text-sm leading-none text-gray-700 bg-white border-b border-gray-200 hover:bg-blue-200 hover:cursor-pointer"
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
