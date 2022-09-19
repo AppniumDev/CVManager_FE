@@ -19,7 +19,7 @@ const BaseLayout = ({ children }: any) => {
         <div className="flex flex-col w-full h-screen overflow-y-auto">
           <HeaderTop />
 
-          <div className="container w-11/12 h-64 px-6 py-10 mx-auto md:w-4/5">
+          <div className="container w-11/12 h-64 py-10 mx-auto md:w-4/5">
             {children}
           </div>
         </div>

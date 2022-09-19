@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import { useMemo } from 'react'
-import { BaseLayout } from '../components/BaseLayout'
-import { LoadingSpinner } from '../components/LoadingSpinner'
-import { TableComponent } from '../components/Table'
-import { useGetAllVehiclesQuery } from '../src/services/vehicles.service'
-import { vehiclesColumns } from '../src/tables/vehicles/vehicle.table-utils'
+import { BaseLayout } from '../../components/BaseLayout'
+import { LoadingSpinner } from '../../components/LoadingSpinner'
+import { TableComponent } from '../../components/Table/TableComponent'
+import { useGetAllVehiclesQuery } from '../../src/services/vehicles.service'
+import { vehiclesColumns } from '../../src/tables/vehicles/vehicle.table-utils'
 
-const Veicoli: NextPage = () => {
+const AssicurazioniPage: NextPage = () => {
   const { data, isLoading } = useGetAllVehiclesQuery()
 
   console.log('Data vehicles: ', data)
@@ -30,4 +30,4 @@ const Veicoli: NextPage = () => {
   return <BaseLayout>{contentRender}</BaseLayout>
 }
 
-export default Veicoli
+export default AssicurazioniPage

@@ -1,6 +1,7 @@
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { VehicleEntity } from '../../../interfaces'
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+import Link from 'next/link'
 
 const columnHelper = createColumnHelper<VehicleEntity>()
 
@@ -32,6 +33,10 @@ export const vehiclesColumns = [
   // Display Column
   columnHelper.display({
     id: 'actions',
-    cell: (props) => <div>Actions buttons</div>,
+    cell: ({ column }) => (
+      <Link href={`/veicoli/${column.id}`}>
+        <div className="px-4 py-2 bg-blue-600 rounded-md">Modifica</div>
+      </Link>
+    ),
   }),
 ]
