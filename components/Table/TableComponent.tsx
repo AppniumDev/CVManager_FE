@@ -31,11 +31,11 @@ const TableComponent = <T extends unknown>(options: ITableComponent<T>) => {
     <>
       <div className="overflow-x-auto bg-white rounded-xl">
         <table className="w-full whitespace-nowrap">
-          <thead>
+          <thead className="">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="w-full h-20 text-sm leading-none text-gray-600 border border-b"
+                className="w-full h-24 text-sm leading-none text-gray-600 border border-b"
               >
                 {headerGroup.headers.map((header) => (
                   <th
@@ -61,7 +61,7 @@ const TableComponent = <T extends unknown>(options: ITableComponent<T>) => {
               </tr>
             ))}
           </thead>
-          <tbody className="w-full bg-red-400">
+          <tbody className="w-full">
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}

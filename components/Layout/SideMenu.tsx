@@ -35,7 +35,11 @@ const MenuItem = (item: IMenuItem) => {
                 isActive ? 'text-white' : 'text-indigo-600'
               }`}
             />
-            <span className="ml-2 text-sm group-hover:text-white">
+            <span
+              className={`ml-2 text-sm group-hover:text-white  ${
+                isActive ? 'text-white' : ''
+              }`}
+            >
               {item.title}
             </span>
           </div>

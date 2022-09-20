@@ -9,13 +9,13 @@ const columnHelper = createColumnHelper<VehicleEntity>()
 export const vehiclesColumns = [
   columnHelper.accessor('name', {
     cell: (info) => info.getValue(),
-    header: () => <span>Furgone</span>,
+    header: () => <span>Nome veicolo</span>,
     footer: (props) => props.column.id,
   }),
   columnHelper.accessor((row) => row.licensePlate, {
     id: 'licensePlate',
     cell: (info) => <Badge color={BadgeColor.Indigo}>{info.getValue()}</Badge>,
-    header: () => <span>Targa</span>,
+    header: () => <span>Targa veicolo</span>,
     footer: (props) => props.column.id,
   }),
   columnHelper.accessor('buildDate', {
@@ -29,7 +29,7 @@ export const vehiclesColumns = [
   }),
 
   columnHelper.accessor('updatedAt', {
-    header: () => <span>Last updated</span>,
+    header: () => <span>Ultimo aggiornamento</span>,
     cell: (info) => (
       <b>{format(new Date(info.getValue()), 'dd/M/yyyy hh:mm')}</b>
     ),

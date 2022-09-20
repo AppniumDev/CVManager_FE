@@ -1,6 +1,6 @@
 import { Column, Table as ReactTable } from '@tanstack/react-table'
 import { InputNumber } from '../Form/InputNumber'
-import { InputText } from '../Form/InputText'
+import { InputTextSearch } from '../Form/InputTextSearch'
 
 export const TableFilter = ({
   column,
@@ -33,7 +33,7 @@ export const TableFilter = ({
       />
     </div>
   ) : (
-    <InputText
+    <InputTextSearch
       value={(columnFilterValue ?? '') as string}
       onChange={(value) => {
         console.log('onChange value', value)
