@@ -1,7 +1,8 @@
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import { VehicleEntity } from '../../../interfaces'
-import { format, formatDistance, formatRelative, subDays } from 'date-fns'
-import Link from 'next/link'
+import { format } from 'date-fns'
+import { Button, ButtonType } from '../../../components/Form/Button'
+import { Badge, BadgeColor } from '../../../components/Form/Badge'
 
 const columnHelper = createColumnHelper<VehicleEntity>()
 
@@ -13,13 +14,17 @@ export const vehiclesColumns = [
   }),
   columnHelper.accessor((row) => row.licensePlate, {
     id: 'licensePlate',
-    cell: (info) => <b>{info.getValue()}</b>,
+    cell: (info) => <Badge color={BadgeColor.Indigo}>{info.getValue()}</Badge>,
     header: () => <span>Targa</span>,
     footer: (props) => props.column.id,
   }),
   columnHelper.accessor('buildDate', {
     header: () => 'Anno immatricolazione',
-    cell: (info) => <b>{format(new Date(info.getValue()), 'MM/yyyy')}</b>,
+    cell: (info) => (
+      <Badge color={BadgeColor.Green}>
+        {format(new Date(info.getValue()), 'MM/yyyy')}
+      </Badge>
+    ),
     footer: (props) => props.column.id,
   }),
 
@@ -33,10 +38,12 @@ export const vehiclesColumns = [
   // Display Column
   columnHelper.display({
     id: 'actions',
-    cell: ({ column }) => (
-      <Link href={`/veicoli/${column.id}`}>
-        <div className="px-4 py-2 bg-blue-600 rounded-md">Modifica</div>
-      </Link>
+    cell: ({ row }) => (
+      <Button
+        text={'Modifica'}
+        type={ButtonType.Primary}
+        link={`/veicoli/${row.original.id}`}
+      />
     ),
   }),
 ]
