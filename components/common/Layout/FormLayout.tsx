@@ -1,5 +1,3 @@
-import { Card, Grid, Text, Button, Row } from '@nextui-org/react'
-
 interface IFormLayout {
   title: string
   children: JSX.Element
@@ -13,9 +11,7 @@ const FormLayout = ({ title, children }: IFormLayout) => {
           <div className="flex w-full py-5 mb-5 border-b border-gray-200">
             <div className="flex items-center w-11/12">
               <p className="pt-1 text-lg font-bold text-indigo-700 uppercase">
-                <Text h2 size="$2xl">
-                  {title}
-                </Text>
+                {title}
               </p>
             </div>
           </div>

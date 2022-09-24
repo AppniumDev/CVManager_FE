@@ -1,19 +1,4 @@
-import {
-  ControllerFieldState,
-  FieldValues,
-  useController,
-  UseControllerProps,
-} from 'react-hook-form'
-
-const getFieldColor = (fieldState: ControllerFieldState) => {
-  if (fieldState.isTouched && fieldState.isDirty && fieldState.invalid) {
-    return 'error'
-  }
-  if (fieldState.isTouched && fieldState.isDirty && !fieldState.invalid) {
-    return 'success'
-  }
-  return 'default'
-}
+import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 const InputTextForm = <T extends FieldValues>({
   label,
@@ -27,16 +12,32 @@ const InputTextForm = <T extends FieldValues>({
 }) => {
   const { field, fieldState } = useController(controllerProps)
 
+  const isErrored =
+    fieldState.isTouched && fieldState.isDirty && fieldState.invalid
+
+  const isValid =
+    fieldState.isTouched && fieldState.isDirty && !fieldState.invalid
+
   return (
     <div className={withWrapper ? 'flex justify-start py-6' : 'flex'}>
-      <Input
-        bordered
-        label={label}
-        placeholder={placeholder}
-        labelPlaceholder={placeholder}
-        color={getFieldColor(fieldState)}
-        {...field}
-      />
+      <div className="w-full max-w-xs form-control">
+        <label className="label">
+          <span className="label-text">{label}</span>
+          {/* <span className="label-text-alt">Alt label</span> */}
+        </label>
+        <input
+          type="text"
+          placeholder={placeholder}
+          className={`w-full max-w-xs input input-bordered ${
+            isErrored && 'input-error'
+          } ${isValid && 'input-success'}`}
+          {...field}
+        />
+        {/* <label className="label">
+          <span className="label-text-alt">Alt label</span>
+          <span className="label-text-alt">Alt label</span>
+        </label> */}
+      </div>
     </div>
   )
 }

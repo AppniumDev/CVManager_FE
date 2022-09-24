@@ -1,8 +1,8 @@
-import { useMemo } from 'react'
 import Link from 'next/link'
 
 interface IButton {
-  text: string
+  children: string
+  overrideClassName?: string
   type: ButtonType
   submit?: boolean
   link?: string
@@ -19,48 +19,49 @@ export enum ButtonType {
 const switchButtonStyle = (type: ButtonType) => {
   switch (type) {
     case ButtonType.Primary:
-      return `bg-indigo-700 hover:bg-indigo-600 rounded text-white`
+      return `btn-primary`
 
     case ButtonType.Secondary:
-      return `hover:border-indigo-600 hover:text-indigo-600 border border-indigo-700 text-indigo-700`
+      return `btn-secondary`
 
     case ButtonType.Link:
-      return `focus:outline-none hover:bg-gray-100 rounded text-indigo-700`
+      return `btn-link`
 
     case ButtonType.Disabled:
-      return 'bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-600'
+      return 'btn-disabled'
   }
 }
 
-const baseStyle =
-  'mx-2 my-1 transition duration-150 ease-in-out rounded px-8 py-3 text-sm uppercase font-semibold tracking-wider focus:outline-none focus:shadow-outline'
-
-const Button = ({ text, type, link, onClick, submit }: IButton) => {
+const Button = ({
+  type,
+  link,
+  onClick,
+  submit,
+  overrideClassName,
+  children,
+}: IButton) => {
   if (link) {
     return (
       <Link href={link} passHref>
         <a
           onClick={onClick}
-          className={`${baseStyle} ${switchButtonStyle(type)}`}
+          className={`btn ${switchButtonStyle(type)} ${overrideClassName}`}
           type={submit ? 'submit' : 'button'}
         >
-          {text}
+          {children}
         </a>
       </Link>
     )
   }
 
   return (
-    <>
-      {' '}
-      <button
-        onClick={onClick}
-        className={`${baseStyle} ${switchButtonStyle(type)}`}
-        type={submit ? 'submit' : 'button'}
-      >
-        {text}
-      </button>
-    </>
+    <button
+      onClick={onClick}
+      className={`btn ${switchButtonStyle(type)} ${overrideClassName}`}
+      type={submit ? 'submit' : 'button'}
+    >
+      {children}
+    </button>
   )
 }
 

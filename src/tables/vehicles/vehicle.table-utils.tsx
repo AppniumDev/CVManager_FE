@@ -39,11 +39,9 @@ export const vehiclesColumns = [
   columnHelper.display({
     id: 'actions',
     cell: ({ row }) => (
-      <Button
-        text={'Modifica'}
-        type={ButtonType.Primary}
-        link={`/veicoli/${row.original.id}`}
-      />
+      <Button type={ButtonType.Primary} link={`/veicoli/${row.original.id}`}>
+        Modifica
+      </Button>
     ),
   }),
 ]

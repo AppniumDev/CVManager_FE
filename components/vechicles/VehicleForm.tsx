@@ -2,7 +2,7 @@ import { DevTool } from '@hookform/devtools'
 import React, { forwardRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { VehicleEntity } from '../../interfaces'
-import { Button } from '@nextui-org/react'
+import { Button, ButtonType } from '../common/Form/Button'
 import { InputTextForm } from '../common/Form/InputTextForm'
 import { FormLayout } from '../common/Layout/FormLayout'
 
@@ -13,9 +13,13 @@ export interface IVehicleForm {
 const VehicleForm = ({ vehicleData }: IVehicleForm) => {
   const isFormEdit = !!vehicleData
 
-  const { register, handleSubmit, control } = useForm<VehicleEntity>({
-    mode: 'onChange',
-  })
+  const { register, handleSubmit, control, formState } = useForm<VehicleEntity>(
+    {
+      mode: 'onChange',
+    }
+  )
+
+  console.log('Form state', formState)
 
   // Register fields
   const nameField = register('name', { required: true })
@@ -60,7 +64,7 @@ const VehicleForm = ({ vehicleData }: IVehicleForm) => {
             />
           </div>
           <div className="flex justify-end">
-            <Button shadow color="primary" auto type="submit">
+            <Button type={ButtonType.Primary}>
               {isFormEdit ? 'Salva Veicolo' : 'Crea Veicolo'}
             </Button>
           </div>
