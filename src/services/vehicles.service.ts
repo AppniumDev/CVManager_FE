@@ -10,7 +10,23 @@ export const vehiclesApi = createApi({
         url: '/vehicles',
       }),
     }),
+    getVehicleById: builder.query<VehicleEntity, string>({
+      query: (id) => ({
+        url: `/vehicles/${id}`,
+      }),
+    }),
+    updateVehicle: builder.mutation<VehicleEntity, VehicleEntity>({
+      query: (vehicle) => ({
+        url: `/vehicles/${vehicle.id}`,
+        method: 'PUT',
+        body: vehicle,
+      }),
+    }),
   }),
 })
 
-export const { useGetAllVehiclesQuery } = vehiclesApi
+export const {
+  useGetAllVehiclesQuery,
+  useGetVehicleByIdQuery,
+  useUpdateVehicleMutation,
+} = vehiclesApi

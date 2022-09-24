@@ -1,55 +1,35 @@
 import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
-import { InputText } from '../../components/Form/InputText'
-import { BaseLayout } from '../../components/Layout/BaseLayout'
-import { FormLayout } from '../../components/Layout/FormLayout'
-import { UpdateVehicleDto } from '../../interfaces'
+import { BaseLayout } from '../../components/common/Layout/BaseLayout'
+import { LoadingSpinner } from '../../components/common/Layout/LoadingSpinner'
+import { VehicleForm } from '../../components/vechicles/VehicleForm'
+import { useGetVehicleByIdQuery } from '../../src/services/vehicles.service'
 
 const VeicoloDetailPage = () => {
   const router = useRouter()
   const { veicoloId } = router.query
 
-  const { register, handleSubmit } = useForm<UpdateVehicleDto>()
+  const isEditMode = veicoloId !== 'new'
 
-  const isFormEdit = veicoloId !== 'new'
+  const { data: vehicleData, isLoading } = useGetVehicleByIdQuery(
+    veicoloId as string,
+    {
+      skip: !isEditMode,
+    }
+  )
 
-  // Register fields
-  const nameField = register('name', { required: true })
-  const licensePlateField = register('licensePlate', { required: true })
-  const buildDateField = register('buildDate', { required: true })
+  if (isEditMode) {
+    if (isLoading) {
+      return <LoadingSpinner />
+    }
 
-  const onSubmit = (data: UpdateVehicleDto) => {}
-
-  const formTitle = isFormEdit
-    ? `Modifica veicolo ${veicoloId}`
-    : 'Nuovo veicolo'
+    if (!vehicleData) {
+      return <div>No data</div>
+    }
+  }
 
   return (
     <BaseLayout>
-      <FormLayout title={formTitle}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col w-full mb-6">
-            <InputText
-              placeholder={`es: Caddy 1.9 TDI`}
-              label={`Nome`}
-              {...nameField}
-              withWrapper
-            />
-            <InputText
-              placeholder={`es: AB123CD`}
-              label={`Targa`}
-              {...licensePlateField}
-              withWrapper
-            />
-            <InputText
-              placeholder={`es: 11/2005`}
-              label={`Data immatricolazione`}
-              {...buildDateField}
-              withWrapper
-            />
-          </div>
-        </form>
-      </FormLayout>
+      <VehicleForm vehicleData={vehicleData} />
     </BaseLayout>
   )
 }

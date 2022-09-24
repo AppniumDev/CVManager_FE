@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import logoCV from '../../assets/logo_cv.jpg'
+import logoCV from '../../../assets/logo_cv.jpg'
 import {
   TruckIcon,
   ClipboardDocumentListIcon,

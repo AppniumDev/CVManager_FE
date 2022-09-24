@@ -14,6 +14,8 @@ const makeStore = () =>
       // Slices
       [appViewSlice.name]: appViewSlice.reducer,
     },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(vehiclesApi.middleware),
     devTools: true,
   })
 

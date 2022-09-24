@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
 import { useMemo } from 'react'
-import { BaseLayout } from '../../components/Layout/BaseLayout'
-import { LoadingSpinner } from '../../components/Layout/LoadingSpinner'
-import { TableComponent } from '../../components/Table/TableComponent'
+import { BaseLayout } from '../../components/common/Layout/BaseLayout'
+import { LoadingSpinner } from '../../components/common/Layout/LoadingSpinner'
+import { TableComponent } from '../../components/common/Table/TableComponent'
 import { useGetAllVehiclesQuery } from '../../src/services/vehicles.service'
 import { vehiclesColumns } from '../../src/tables/vehicles/vehicle.table-utils'
 

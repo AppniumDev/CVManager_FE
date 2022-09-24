@@ -4,8 +4,9 @@ import Link from 'next/link'
 interface IButton {
   text: string
   type: ButtonType
+  submit?: boolean
   link?: string
-  onClick?: () => void
+  onClick?: (event: any) => void
 }
 
 export enum ButtonType {
@@ -32,26 +33,35 @@ const switchButtonStyle = (type: ButtonType) => {
 }
 
 const baseStyle =
-  'mx-2 my-1 transition duration-150 ease-in-out rounded px-8 py-3 text-sm'
+  'mx-2 my-1 transition duration-150 ease-in-out rounded px-8 py-3 text-sm uppercase font-semibold tracking-wider focus:outline-none focus:shadow-outline'
 
-const Button = ({ text, type, link, onClick }: IButton) => {
-  const content = useMemo(
-    () => (
+const Button = ({ text, type, link, onClick, submit }: IButton) => {
+  if (link) {
+    return (
+      <Link href={link} passHref>
+        <a
+          onClick={onClick}
+          className={`${baseStyle} ${switchButtonStyle(type)}`}
+          type={submit ? 'submit' : 'button'}
+        >
+          {text}
+        </a>
+      </Link>
+    )
+  }
+
+  return (
+    <>
+      {' '}
       <button
         onClick={onClick}
         className={`${baseStyle} ${switchButtonStyle(type)}`}
+        type={submit ? 'submit' : 'button'}
       >
         {text}
       </button>
-    ),
-    [text, type, onClick]
+    </>
   )
-
-  if (link) {
-    return <Link href={link}>{content}</Link>
-  }
-
-  return <>{content}</>
 }
 
 export { Button }

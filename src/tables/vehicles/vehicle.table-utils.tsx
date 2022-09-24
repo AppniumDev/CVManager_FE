@@ -1,8 +1,8 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { VehicleEntity } from '../../../interfaces'
 import { format } from 'date-fns'
-import { Button, ButtonType } from '../../../components/Form/Button'
-import { Badge, BadgeColor } from '../../../components/Form/Badge'
+import { Button, ButtonType } from '../../../components/common/Form/Button'
+import { Badge, BadgeColor } from '../../../components/common/Form/Badge'
 
 const columnHelper = createColumnHelper<VehicleEntity>()
 
