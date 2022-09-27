@@ -18,7 +18,7 @@ export const vehiclesApi = createApi({
     updateVehicle: builder.mutation<VehicleEntity, VehicleEntity>({
       query: (vehicle) => ({
         url: `/vehicles/${vehicle.id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body: vehicle,
       }),
     }),

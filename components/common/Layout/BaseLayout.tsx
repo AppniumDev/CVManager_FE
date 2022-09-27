@@ -1,6 +1,7 @@
 import { SideMenu } from './SideMenu'
 import Head from 'next/head'
 import { HeaderTop } from './HeaderTop'
+import { ModalSwitcher } from '../ModalSwitcher/ModalSwitcher'
 
 const BaseLayout = ({ children }: any) => {
   return (
@@ -22,6 +23,8 @@ const BaseLayout = ({ children }: any) => {
           <div className="container w-11/12 h-64 py-10 mx-auto md:w-4/5">
             {children}
           </div>
+
+          <ModalSwitcher />
         </div>
       </div>
     </>

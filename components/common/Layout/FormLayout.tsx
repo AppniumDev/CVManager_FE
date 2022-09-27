@@ -1,18 +1,21 @@
+import { Typography } from '@mui/material'
+
 interface IFormLayout {
   title: string
+  width: string
   children: JSX.Element
 }
 
-const FormLayout = ({ title, children }: IFormLayout) => {
+const FormLayout = ({ title, children, width = 'w-8/12' }: IFormLayout) => {
   return (
     <div className="flex justify-center">
-      <div className="flex w-10/12 bg-white shadow-xl rounded-xl">
+      <div className={`flex ${width} p-6 bg-white shadow-xl rounded-xl`}>
         <div className="w-full px-6">
           <div className="flex w-full py-5 mb-5 border-b border-gray-200">
             <div className="flex items-center w-11/12">
-              <p className="pt-1 text-lg font-bold text-indigo-700 uppercase">
+              <Typography id="modal-title" variant="h6" component="h2">
                 {title}
-              </p>
+              </Typography>
             </div>
           </div>
           <div className="flex justify-center">

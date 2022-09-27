@@ -10,33 +10,31 @@ export const TablePagination = <T extends unknown>({
   return (
     <>
       <div className="flex flex-col items-center justify-between my-6">
-        <div>{table.getRowModel().rows.length} Rows</div>
-
-        <div className="flex items-center justify-center">
-          <div className="flex items-center justify-center w-full gap-2 px-12 py-6 bg-white rounded-xl shrink">
+        <div className="fixed left-0 right-0 flex items-center justify-center ml-auto mr-auto bottom-6">
+          <div className="flex items-center justify-center w-full max-w-3xl gap-2 px-12 py-6 bg-white rounded-xl shrink">
             <button
-              className="p-1 border rounded"
+              className="w-10 h-10 p-1 border rounded cursor-pointer"
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
             >
               {'<<'}
             </button>
             <button
-              className="p-1 border rounded"
+              className="w-10 h-10 p-1 border rounded cursor-pointer"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
               {'<'}
             </button>
             <button
-              className="p-1 border rounded"
+              className="w-10 h-10 p-1 border rounded cursor-pointer"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
               {'>'}
             </button>
             <button
-              className="p-1 border rounded"
+              className="w-10 h-10 p-1 border rounded cursor-pointer"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
             >

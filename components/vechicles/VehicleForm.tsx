@@ -1,78 +1,47 @@
 import { DevTool } from '@hookform/devtools'
-import React, { forwardRef } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { VehicleEntity } from '../../interfaces'
-import { Button, ButtonType } from '../common/Form/Button'
 import { InputTextForm } from '../common/Form/InputTextForm'
 import { FormLayout } from '../common/Layout/FormLayout'
+import * as Yup from 'yup'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
+import Uppy from '@uppy/core'
+import { DashboardModal } from '@uppy/react'
+import { Button } from '@mui/material'
+import { useAppDispatch, useAppSelector } from '../../src/state/reduxHooks'
+import { closeModal } from '../../src/state/appViewSlice'
+import { LoadingSpinner } from '../common/Layout/LoadingSpinner'
+import { useGetVehicleByIdQuery } from '../../src/services/vehicles.service'
+import { VehicleFormContent } from './VehicleFormContent'
 
-export interface IVehicleForm {
-  vehicleData?: VehicleEntity
-}
+export interface IVehicleForm {}
 
-const VehicleForm = ({ vehicleData }: IVehicleForm) => {
-  const isFormEdit = !!vehicleData
+const VehicleForm = () => {
+  const { modalEntityId, modalMode } = useAppSelector(({ appView }) => appView)
 
-  const { register, handleSubmit, control, formState } = useForm<VehicleEntity>(
+  const isFormEdit = modalEntityId && modalMode === 'edit'
+
+  const { data: vehicleData, isLoading } = useGetVehicleByIdQuery(
+    modalEntityId as string,
     {
-      mode: 'onChange',
+      skip: !isFormEdit,
     }
   )
 
-  console.log('Form state', formState)
+  if (isFormEdit) {
+    if (isLoading) {
+      return <LoadingSpinner />
+    }
 
-  // Register fields
-  const nameField = register('name', { required: true })
-  const licensePlateField = register('licensePlate', { required: true })
-  const buildDateField = register('buildDate', { required: true })
-
-  const onSubmit = (data: any) => {
-    alert(JSON.stringify(data))
+    if (!vehicleData) {
+      return <div>No data</div>
+    }
   }
 
-  const formTitle = isFormEdit
-    ? `Modifica veicolo ${vehicleData.name}`
-    : 'Nuovo veicolo'
-
-  console.log('useForm control', control)
-
-  return (
-    <FormLayout title={formTitle}>
-      <>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col w-full mb-6">
-            <InputTextForm<VehicleEntity>
-              placeholder={`es: Caddy 1.9 TDI`}
-              label={`Nome veicolo`}
-              name={`name`}
-              control={control}
-              withWrapper
-            />
-            <InputTextForm<VehicleEntity>
-              placeholder={`es: Caddy 1.9 TDI`}
-              label={`Targa veicolo`}
-              name={`licensePlate`}
-              control={control}
-              withWrapper
-            />
-            <InputTextForm<VehicleEntity>
-              placeholder={`es: Caddy 1.9 TDI`}
-              label={`Anno immatricolazione`}
-              name={`buildDate`}
-              control={control}
-              withWrapper
-            />
-          </div>
-          <div className="flex justify-end">
-            <Button type={ButtonType.Primary}>
-              {isFormEdit ? 'Salva Veicolo' : 'Crea Veicolo'}
-            </Button>
-          </div>
-        </form>
-        <DevTool control={control} />
-      </>
-    </FormLayout>
-  )
+  return <VehicleFormContent vehicleData={vehicleData} />
 }
 
 VehicleForm.displayName = 'VehicleForm'
