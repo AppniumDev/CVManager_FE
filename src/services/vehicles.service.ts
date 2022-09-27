@@ -18,6 +18,14 @@ export const vehiclesApi = createApi({
       }),
       providesTags: ['Vehicle'],
     }),
+    createVehicle: builder.mutation<VehicleEntity, VehicleEntity>({
+      query: (vehicle) => ({
+        url: `/vehicles`,
+        method: 'POST',
+        body: vehicle,
+      }),
+      invalidatesTags: ['Vehicle'],
+    }),
     updateVehicle: builder.mutation<VehicleEntity, VehicleEntity>({
       query: (vehicle) => ({
         url: `/vehicles/${vehicle.id}`,
@@ -32,5 +40,6 @@ export const vehiclesApi = createApi({
 export const {
   useGetAllVehiclesQuery,
   useGetVehicleByIdQuery,
+  useCreateVehicleMutation,
   useUpdateVehicleMutation,
 } = vehiclesApi

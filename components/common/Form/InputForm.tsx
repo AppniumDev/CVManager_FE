@@ -22,6 +22,7 @@ const InputForm = <T extends FieldValues>({
         label={label}
         placeholder={placeholder}
         variant="outlined"
+        defaultValue={field.value}
         error={isErrored}
         helperText={isErrored ? fieldState.error?.message : ''}
         {...field}

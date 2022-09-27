@@ -10,34 +10,63 @@ import * as Yup from 'yup'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 import Uppy from '@uppy/core'
-import { DashboardModal } from '@uppy/react'
+import { DashboardModal, useUppy } from '@uppy/react'
 import { Button, Typography } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../../src/state/reduxHooks'
+import { useAppDispatch } from '../../src/state/reduxHooks'
 import { closeModal } from '../../src/state/appViewSlice'
-import { useUpdateVehicleMutation } from '../../src/services/vehicles.service'
+import {
+  useCreateVehicleMutation,
+  useUpdateVehicleMutation,
+} from '../../src/services/vehicles.service'
+import XHRUpload from '@uppy/xhr-upload'
+import italianLanguage from '@uppy/locales/lib/it_IT'
+import { serverEndpoint } from '../../src/config'
+import shortid from 'shortid'
 
 export interface IVehicleForm {
   vehicleData?: VehicleEntity
 }
 
-const uppy = new Uppy()
-
-const formValidationSchema = Yup.object()
-  .shape({
-    name: Yup.string().required(),
-    licensePlate: Yup.string().required(),
-    buildDate: Yup.string().required(),
-  })
-  .required()
+const formValidationSchema = Yup.object().shape({
+  name: Yup.string().required(),
+  licensePlate: Yup.string().required(),
+  buildDate: Yup.string().required(),
+})
 
 const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
   const dispatch = useAppDispatch()
 
-  const isFormEdit = !!vehicleData
-
   // Local state
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isUppyModalOpen, setIsUppyModalOpen] = useState(false)
+  const isFormEdit = !!vehicleData
+  const formTitle = isFormEdit
+    ? `Modifica veicolo | ${vehicleData?.name}`
+    : 'Nuovo veicolo'
 
+  // Uppy section
+  const uppy = useUppy(() => {
+    return new Uppy({
+      id: 'DragDropImages',
+      locale: italianLanguage,
+      onBeforeFileAdded: (currentFile: any, files: any) => {
+        let extensionImage = '.jpg'
+        let currentFileCopy = currentFile
+        const generatedNameHash = shortid.generate()
+        currentFileCopy.name = generatedNameHash + extensionImage
+        return currentFileCopy
+      },
+      restrictions: {
+        allowedFileTypes: ['image/*'],
+      },
+    }).use(XHRUpload, {
+      bundle: true,
+      endpoint: `${serverEndpoint}/upload-images`,
+      fieldName: 'files',
+      formData: true,
+    })
+  })
+
+  // React hook form init
   const defaultValues = useMemo(
     () =>
       vehicleData && {
@@ -52,20 +81,27 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
     register,
     handleSubmit,
     control,
-    formState: { isValid, isDirty },
+    formState: { isValid, isDirty, errors },
   } = useForm<VehicleEntity>({
     mode: 'onChange',
     resolver: yupResolver(formValidationSchema),
     ...(defaultValues && { defaultValues }),
   })
 
-  const [updateVehicle, { isLoading }] = useUpdateVehicleMutation()
+  console.log('Form state', { isValid, isDirty, errors })
 
   // Register fields
   const nameField = register('name', { required: true })
   const licensePlateField = register('licensePlate', { required: true })
   const buildDateField = register('buildDate', { required: true })
 
+  // Redux RTK Query actions
+  const [updateVehicle, { isLoading: isLoadingUpdateVehicle }] =
+    useUpdateVehicleMutation()
+  const [createVehicle, { isLoading: isLoadingCreateVehicle }] =
+    useCreateVehicleMutation()
+
+  // Submit form function
   const onSubmit = async (data: Partial<VehicleEntity>) => {
     try {
       const buildDateFormatted =
@@ -80,17 +116,17 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
       delete body.updatedAt
       delete body.createdAt
 
-      await updateVehicle(body as VehicleEntity)
+      if (isFormEdit) {
+        await updateVehicle(body as VehicleEntity)
+      } else {
+        await createVehicle(body as VehicleEntity)
+      }
     } catch (e) {
       console.log(e)
     }
 
     dispatch(closeModal())
   }
-
-  const formTitle = isFormEdit
-    ? `Modifica veicolo ${vehicleData?.name}`
-    : 'Nuovo veicolo'
 
   return (
     <FormLayout title={formTitle} width="w-7/12">
@@ -127,28 +163,28 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
             Documenti veicolo
           </Typography>
           <div className="flex flex-wrap w-full gap-8 pt-4 mb-3">
-            <Button
-              variant="outlined"
-              onClick={() => dispatch(closeModal())}
-              disabled={isLoading}
-            >
+            <Button variant="outlined" onClick={() => setIsUppyModalOpen(true)}>
               {'Carica libretto'}
             </Button>
-            <Button
-              variant="outlined"
-              onClick={() => dispatch(closeModal())}
-              disabled={isLoading}
-            >
+            <Button variant="outlined" onClick={() => setIsUppyModalOpen(true)}>
               {'Carica foto'}
             </Button>
           </div>
 
           <div className="flex justify-end gap-4">
-            <Button onClick={() => dispatch(closeModal())} disabled={isLoading}>
+            <Button
+              onClick={() => dispatch(closeModal())}
+              disabled={isLoadingUpdateVehicle || isLoadingCreateVehicle}
+            >
               {'Chiudi'}
             </Button>
             <Button
-              disabled={isLoading || !isValid || !isDirty}
+              disabled={
+                isLoadingUpdateVehicle ||
+                isLoadingCreateVehicle ||
+                !isValid ||
+                !isDirty
+              }
               variant="contained"
               type="submit"
             >
@@ -159,8 +195,8 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
         <DevTool control={control} />
         <DashboardModal
           uppy={uppy}
-          open={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
+          open={isUppyModalOpen}
+          onRequestClose={() => setIsUppyModalOpen(false)}
           proudlyDisplayPoweredByUppy={false}
         />
       </>
