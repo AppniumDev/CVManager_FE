@@ -11,7 +11,8 @@ const BaseLayout = ({ children }: any) => {
   const theme = createTheme(
     {
       palette: {
-        primary: { main: '#1976d2' },
+        primary: { main: '#6365f1' },
+        secondary: { main: '#e3af54' },
       },
     },
     itIT, // x-data-grid translations

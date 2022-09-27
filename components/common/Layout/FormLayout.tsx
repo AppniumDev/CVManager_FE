@@ -13,7 +13,7 @@ const FormLayout = ({ title, children, width = 'w-8/12' }: IFormLayout) => {
         <div className="w-full px-6">
           <div className="flex w-full py-5 mb-5 border-b border-gray-200">
             <div className="flex items-center w-11/12">
-              <Typography id="modal-title" variant="h6" component="h2">
+              <Typography id="modal-title" variant="h5" component="h1">
                 {title}
               </Typography>
             </div>

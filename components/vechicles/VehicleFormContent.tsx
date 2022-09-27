@@ -11,7 +11,7 @@ import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../src/state/reduxHooks'
 import { closeModal } from '../../src/state/appViewSlice'
 import { useUpdateVehicleMutation } from '../../src/services/vehicles.service'
@@ -48,7 +48,12 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
     [vehicleData]
   )
 
-  const { register, handleSubmit, control } = useForm<VehicleEntity>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { isValid, isDirty },
+  } = useForm<VehicleEntity>({
     mode: 'onChange',
     resolver: yupResolver(formValidationSchema),
     ...(defaultValues && { defaultValues }),
@@ -91,7 +96,10 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
     <FormLayout title={formTitle} width="w-7/12">
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-wrap w-full gap-10 mb-6">
+          <Typography variant="h6" component="h1" className="mb-4">
+            Dati veicolo
+          </Typography>
+          <div className="flex flex-wrap w-full gap-10 mb-3">
             <InputForm<VehicleEntity>
               placeholder={`es: Caddy 1.9 TDI`}
               label={`Nome veicolo`}
@@ -114,11 +122,36 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
               withWrapper
             />
           </div>
-          <div className="flex justify-end">
+
+          <Typography variant="h6" component="h2" className="mb-4">
+            Documenti veicolo
+          </Typography>
+          <div className="flex flex-wrap w-full gap-8 pt-4 mb-3">
+            <Button
+              variant="outlined"
+              onClick={() => dispatch(closeModal())}
+              disabled={isLoading}
+            >
+              {'Carica libretto'}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => dispatch(closeModal())}
+              disabled={isLoading}
+            >
+              {'Carica foto'}
+            </Button>
+          </div>
+
+          <div className="flex justify-end gap-4">
             <Button onClick={() => dispatch(closeModal())} disabled={isLoading}>
               {'Chiudi'}
             </Button>
-            <Button disabled={isLoading} variant="contained" type="submit">
+            <Button
+              disabled={isLoading || !isValid || !isDirty}
+              variant="contained"
+              type="submit"
+            >
               {isFormEdit ? 'Salva Veicolo' : 'Crea Veicolo'}
             </Button>
           </div>

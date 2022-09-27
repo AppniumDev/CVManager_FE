@@ -20,7 +20,7 @@ export const vehiclesColumns = ({
       headerName: 'Targa Veicolo',
       flex: 1,
       renderCell({ value }) {
-        return <Chip color="primary" label={value} />
+        return <Chip color="secondary" label={value} />
       },
     },
     {
@@ -46,6 +46,7 @@ export const vehiclesColumns = ({
       renderCell({ row }) {
         return (
           <Button
+            variant="outlined"
             onClick={() => {
               dispatch(
                 openModal({

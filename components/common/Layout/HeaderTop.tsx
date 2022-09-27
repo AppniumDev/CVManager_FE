@@ -54,36 +54,8 @@ const HeaderTop = () => {
                   <div className="absolute inset-0 w-2 h-2 m-auto mt-1 mr-1 bg-red-400 border border-white rounded-full" />
                 </div>
               </div>
-              <div className="flex items-center justify-center w-20 h-full mr-4 text-gray-600 border-r cursor-pointer">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-messages"
-                  width={28}
-                  height={28}
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" />
-                  <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
-                  <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
-                </svg>
-              </div>
               <div className="relative flex items-center cursor-pointer">
-                <div className="rounded-full">
-                  <div className="relative">
-                    <img
-                      className="object-cover w-10 h-10 rounded-full"
-                      src="https://tuk-cdn.s3.amazonaws.com/assets/components/sidebar_layout/sl_1.png"
-                      alt="avatar"
-                    />
-                    <div className="absolute inset-0 w-2 h-2 m-auto mb-0 mr-0 bg-green-400 border border-white rounded-full" />
-                  </div>
-                </div>
-                <p className="mx-3 text-sm text-gray-800">Jane Doe</p>
+                <p className="mx-3 text-sm text-gray-800">Amministratore</p>
                 <div className="text-gray-600 cursor-pointer">
                   <svg
                     aria-haspopup="true"
