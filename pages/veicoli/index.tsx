@@ -12,8 +12,6 @@ const VeicoliPage: NextPage = () => {
 
   const dispatch = useAppDispatch()
 
-  console.log('Data vehicles: ', data)
-
   const columnsGenerated = useMemo(
     () => vehiclesColumns({ dispatch }),
     [dispatch]
@@ -29,16 +27,14 @@ const VeicoliPage: NextPage = () => {
     }
 
     return (
-      <>
-        <div className="bg-white rounded-lg shadow-xl">
-          <DataGrid
-            rows={data}
-            columns={columnsGenerated}
-            autoHeight
-            disableSelectionOnClick
-          />
-        </div>
-      </>
+      <div className="bg-white rounded-lg shadow-xl">
+        <DataGrid
+          rows={data}
+          columns={columnsGenerated}
+          autoHeight
+          disableSelectionOnClick
+        />
+      </div>
     )
   }, [isLoading, data, columnsGenerated])
 

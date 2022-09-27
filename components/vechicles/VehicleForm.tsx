@@ -1,21 +1,13 @@
-import { DevTool } from '@hookform/devtools'
-import { yupResolver } from '@hookform/resolvers/yup'
-import React, { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { VehicleEntity } from '../../interfaces'
-import { InputTextForm } from '../common/Form/InputTextForm'
-import { FormLayout } from '../common/Layout/FormLayout'
-import * as Yup from 'yup'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
-import Uppy from '@uppy/core'
-import { DashboardModal } from '@uppy/react'
-import { Button } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../../src/state/reduxHooks'
-import { closeModal } from '../../src/state/appViewSlice'
+import React from 'react'
+
+import { useAppSelector } from '../../src/state/reduxHooks'
 import { LoadingSpinner } from '../common/Layout/LoadingSpinner'
 import { useGetVehicleByIdQuery } from '../../src/services/vehicles.service'
 import { VehicleFormContent } from './VehicleFormContent'
+
+// Styles
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
 
 export interface IVehicleForm {}
 

@@ -1,4 +1,4 @@
-import { Modal, Typography } from '@mui/material'
+import { Modal } from '@mui/material'
 import { useMemo } from 'react'
 import { closeModal } from '../../../src/state/appViewSlice'
 import { useAppDispatch, useAppSelector } from '../../../src/state/reduxHooks'
@@ -18,21 +18,21 @@ const ModalSwitcher = () => {
       case MODALS.VEHICLE_FORM:
         return <VehicleForm />
     }
-
-    return <></>
   }, [modalOpened])
 
+  if (!renderModalContent) {
+    return <></>
+  }
+
   return (
-    <>
-      <Modal
-        open={!!modalOpened && modalOpened !== MODALS.NONE}
-        onClose={() => dispatch(closeModal)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        {renderModalContent}
-      </Modal>
-    </>
+    <Modal
+      open={!!modalOpened && modalOpened !== MODALS.NONE}
+      onClose={() => dispatch(closeModal)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <>{renderModalContent}</>
+    </Modal>
   )
 }
 
