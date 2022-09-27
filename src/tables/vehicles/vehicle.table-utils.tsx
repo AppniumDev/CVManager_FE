@@ -1,7 +1,7 @@
 import { VehicleEntity } from '../../../interfaces'
 import { format } from 'date-fns'
 import { GridColDef, GridColumns } from '@mui/x-data-grid'
-import { Badge, Button } from '@mui/material'
+import { Chip, Button } from '@mui/material'
 import { MODALS } from '../../../components/common/ModalSwitcher/ModalSwitcher'
 import { openModal } from '../../state/appViewSlice'
 import { AppDispatch } from '../../state/store'
@@ -15,13 +15,20 @@ export const vehiclesColumns = ({
 }: IVechiclesColumns): GridColumns<VehicleEntity> => {
   const columns: GridColDef<VehicleEntity>[] = [
     { field: 'name', headerName: 'Nome Veicolo', flex: 1 },
-    { field: 'licensePlate', headerName: 'Targa Veicolo', flex: 1 },
+    {
+      field: 'licensePlate',
+      headerName: 'Targa Veicolo',
+      flex: 1,
+      renderCell({ value }) {
+        return <Chip color="primary" label={value} />
+      },
+    },
     {
       field: 'buildDate',
       headerName: 'Data Immatricolazione',
       flex: 1,
       renderCell({ value }) {
-        return <Badge>{format(new Date(value), 'MM/yyyy')}</Badge>
+        return <b>{format(new Date(value), 'dd/M/yyyy')}</b>
       },
     },
     {

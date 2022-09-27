@@ -3,7 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { VehicleEntity } from '../../interfaces'
-import { InputTextForm } from '../common/Form/InputTextForm'
+import { InputForm } from '../common/Form/InputForm'
+import { InputDateForm } from '../common/Form/InputDateForm'
 import { FormLayout } from '../common/Layout/FormLayout'
 import * as Yup from 'yup'
 import '@uppy/core/dist/style.css'
@@ -13,6 +14,7 @@ import { DashboardModal } from '@uppy/react'
 import { Button } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../src/state/reduxHooks'
 import { closeModal } from '../../src/state/appViewSlice'
+import { useUpdateVehicleMutation } from '../../src/services/vehicles.service'
 
 export interface IVehicleForm {
   vehicleData?: VehicleEntity
@@ -46,23 +48,39 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
     [vehicleData]
   )
 
-  const { register, handleSubmit, control, formState } = useForm<VehicleEntity>(
-    {
-      mode: 'onChange',
-      resolver: yupResolver(formValidationSchema),
-      ...(defaultValues && { defaultValues }),
-    }
-  )
+  const { register, handleSubmit, control } = useForm<VehicleEntity>({
+    mode: 'onChange',
+    resolver: yupResolver(formValidationSchema),
+    ...(defaultValues && { defaultValues }),
+  })
 
-  console.log('Form state', formState)
+  const [updateVehicle, { isLoading }] = useUpdateVehicleMutation()
 
   // Register fields
   const nameField = register('name', { required: true })
   const licensePlateField = register('licensePlate', { required: true })
   const buildDateField = register('buildDate', { required: true })
 
-  const onSubmit = (data: any) => {
-    alert(JSON.stringify(data))
+  const onSubmit = async (data: Partial<VehicleEntity>) => {
+    try {
+      const buildDateFormatted =
+        data.buildDate && new Date(data.buildDate).toISOString()
+
+      let body: Partial<VehicleEntity> = {
+        ...vehicleData,
+        ...data,
+        buildDate: buildDateFormatted,
+      } as Partial<VehicleEntity>
+
+      delete body.updatedAt
+      delete body.createdAt
+
+      await updateVehicle(body as VehicleEntity)
+    } catch (e) {
+      console.log(e)
+    }
+
+    dispatch(closeModal())
   }
 
   const formTitle = isFormEdit
@@ -74,31 +92,33 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-wrap w-full gap-10 mb-6">
-            <InputTextForm<VehicleEntity>
+            <InputForm<VehicleEntity>
               placeholder={`es: Caddy 1.9 TDI`}
               label={`Nome veicolo`}
               name={`name`}
               control={control}
               withWrapper
             />
-            <InputTextForm<VehicleEntity>
+            <InputForm<VehicleEntity>
               placeholder={`es: FD1234DD`}
               label={`Targa veicolo`}
               name={`licensePlate`}
               control={control}
               withWrapper
             />
-            <InputTextForm<VehicleEntity>
+            <InputDateForm<VehicleEntity>
               placeholder={`es: 09/2003`}
-              label={`Anno immatricolazione`}
+              label={`Data immatricolazione`}
               name={`buildDate`}
               control={control}
               withWrapper
             />
           </div>
           <div className="flex justify-end">
-            <Button onClick={() => dispatch(closeModal())}>{'Chiudi'}</Button>
-            <Button variant="contained" type="submit">
+            <Button onClick={() => dispatch(closeModal())} disabled={isLoading}>
+              {'Chiudi'}
+            </Button>
+            <Button disabled={isLoading} variant="contained" type="submit">
               {isFormEdit ? 'Salva Veicolo' : 'Crea Veicolo'}
             </Button>
           </div>
