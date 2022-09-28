@@ -2,21 +2,21 @@ import type { NextPage } from 'next'
 import { useMemo } from 'react'
 import { BaseLayout } from '../../components/common/Layout/BaseLayout'
 import { LoadingSpinner } from '../../components/common/Layout/LoadingSpinner'
-import { useGetAllVehiclesQuery } from '../../src/services/vehicles.service'
-import { vehiclesColumns } from '../../src/tables/vehicles/vehicles.table-utils'
+import { useGetAllInsurancesQuery } from '../../src/services/insurances.service'
+import { insurancesColumns } from '../../src/tables/insurances/insurances.table-utils'
 import { DataGrid } from '@mui/x-data-grid'
 import { useAppDispatch } from '../../src/state/reduxHooks'
 import { Button } from '@mui/material'
 import { MODALS } from '../../components/common/ModalSwitcher/ModalSwitcher'
 import { openModal } from '../../src/state/appViewSlice'
 
-const VeicoliPage: NextPage = () => {
-  const { data, isLoading } = useGetAllVehiclesQuery()
+const AssicurazioniPage: NextPage = () => {
+  const { data, isLoading } = useGetAllInsurancesQuery()
 
   const dispatch = useAppDispatch()
 
   const columnsGenerated = useMemo(
-    () => vehiclesColumns({ dispatch }),
+    () => insurancesColumns({ dispatch }),
     [dispatch]
   )
 
@@ -44,7 +44,7 @@ const VeicoliPage: NextPage = () => {
                 )
               }}
             >
-              Aggiungi Veicolo
+              Aggiungi Assicurazione
             </Button>
           </div>
         </div>
@@ -58,9 +58,9 @@ const VeicoliPage: NextPage = () => {
         </div>
       </>
     )
-  }, [isLoading, data, columnsGenerated])
+  }, [isLoading, data, columnsGenerated, dispatch])
 
   return <BaseLayout>{contentRender}</BaseLayout>
 }
 
-export default VeicoliPage
+export default AssicurazioniPage

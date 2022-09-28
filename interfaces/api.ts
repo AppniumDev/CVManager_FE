@@ -24,52 +24,142 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
- * @interface CreateVehicleDto
+ * @interface InsuranceEntity
  */
-export interface CreateVehicleDto {
+export interface InsuranceEntity {
+    /**
+     * 
+     * @type {number}
+     * @memberof InsuranceEntity
+     */
+    'id': number;
     /**
      * 
      * @type {string}
-     * @memberof CreateVehicleDto
+     * @memberof InsuranceEntity
+     */
+    'insuranceCompany': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InsuranceEntity
+     */
+    'description': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof InsuranceEntity
+     */
+    'firstInstallment': object;
+    /**
+     * 
+     * @type {object}
+     * @memberof InsuranceEntity
+     */
+    'secondInstallment': object;
+    /**
+     * 
+     * @type {object}
+     * @memberof InsuranceEntity
+     */
+    'price': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof InsuranceEntity
+     */
+    'startDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InsuranceEntity
+     */
+    'endDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InsuranceEntity
+     */
+    'suspensionDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InsuranceEntity
+     */
+    'reactivationDate': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof InsuranceEntity
+     */
+    'vehicleId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InsuranceEntity
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InsuranceEntity
+     */
+    'updatedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface MaintenanceEntity
+ */
+export interface MaintenanceEntity {
+    /**
+     * 
+     * @type {number}
+     * @memberof MaintenanceEntity
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MaintenanceEntity
      */
     'name': string;
     /**
      * 
      * @type {string}
-     * @memberof CreateVehicleDto
+     * @memberof MaintenanceEntity
      */
-    'licensePlate': string;
+    'description': string;
     /**
      * 
      * @type {string}
-     * @memberof CreateVehicleDto
+     * @memberof MaintenanceEntity
      */
-    'buildDate': string;
-}
-/**
- * 
- * @export
- * @interface UpdateVehicleDto
- */
-export interface UpdateVehicleDto {
+    'dateDone': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MaintenanceEntity
+     */
+    'kilometers': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MaintenanceEntity
+     */
+    'vehicleId': number;
     /**
      * 
      * @type {string}
-     * @memberof UpdateVehicleDto
+     * @memberof MaintenanceEntity
      */
-    'name'?: string;
+    'createdAt': string;
     /**
      * 
      * @type {string}
-     * @memberof UpdateVehicleDto
+     * @memberof MaintenanceEntity
      */
-    'licensePlate'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateVehicleDto
-     */
-    'buildDate'?: string;
+    'updatedAt': string;
 }
 /**
  * 
@@ -101,6 +191,12 @@ export interface VehicleEntity {
      * @memberof VehicleEntity
      */
     'buildDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof VehicleEntity
+     */
+    'vehicleImage': string;
     /**
      * 
      * @type {string}
@@ -179,6 +275,35 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appControllerUploadFile: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/upload-images`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -207,6 +332,15 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.appControllerGetHelloDiff(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async appControllerUploadFile(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appControllerUploadFile(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -232,6 +366,14 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         appControllerGetHelloDiff(options?: any): AxiosPromise<void> {
             return localVarFp.appControllerGetHelloDiff(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appControllerUploadFile(options?: any): AxiosPromise<void> {
+            return localVarFp.appControllerUploadFile(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -262,6 +404,1087 @@ export class DefaultApi extends BaseAPI {
     public appControllerGetHelloDiff(options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).appControllerGetHelloDiff(options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public appControllerUploadFile(options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).appControllerUploadFile(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * InsurancesApi - axios parameter creator
+ * @export
+ */
+export const InsurancesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerCreate: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('insurancesControllerCreate', 'body', body)
+            const localVarPath = `/insurances`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerFindAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/insurances`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerFindOne: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('insurancesControllerFindOne', 'id', id)
+            const localVarPath = `/insurances/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerRemove: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('insurancesControllerRemove', 'id', id)
+            const localVarPath = `/insurances/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerUpdate: async (id: string, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('insurancesControllerUpdate', 'id', id)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('insurancesControllerUpdate', 'body', body)
+            const localVarPath = `/insurances/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * InsurancesApi - functional programming interface
+ * @export
+ */
+export const InsurancesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = InsurancesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async insurancesControllerCreate(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsuranceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insurancesControllerCreate(body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async insurancesControllerFindAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InsuranceEntity>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insurancesControllerFindAll(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async insurancesControllerFindOne(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsuranceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insurancesControllerFindOne(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async insurancesControllerRemove(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsuranceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insurancesControllerRemove(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async insurancesControllerUpdate(id: string, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsuranceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insurancesControllerUpdate(id, body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * InsurancesApi - factory interface
+ * @export
+ */
+export const InsurancesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = InsurancesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerCreate(body: object, options?: any): AxiosPromise<InsuranceEntity> {
+            return localVarFp.insurancesControllerCreate(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerFindAll(options?: any): AxiosPromise<Array<InsuranceEntity>> {
+            return localVarFp.insurancesControllerFindAll(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerFindOne(id: string, options?: any): AxiosPromise<InsuranceEntity> {
+            return localVarFp.insurancesControllerFindOne(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerRemove(id: string, options?: any): AxiosPromise<InsuranceEntity> {
+            return localVarFp.insurancesControllerRemove(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        insurancesControllerUpdate(id: string, body: object, options?: any): AxiosPromise<InsuranceEntity> {
+            return localVarFp.insurancesControllerUpdate(id, body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * InsurancesApi - object-oriented interface
+ * @export
+ * @class InsurancesApi
+ * @extends {BaseAPI}
+ */
+export class InsurancesApi extends BaseAPI {
+    /**
+     * 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InsurancesApi
+     */
+    public insurancesControllerCreate(body: object, options?: AxiosRequestConfig) {
+        return InsurancesApiFp(this.configuration).insurancesControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InsurancesApi
+     */
+    public insurancesControllerFindAll(options?: AxiosRequestConfig) {
+        return InsurancesApiFp(this.configuration).insurancesControllerFindAll(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InsurancesApi
+     */
+    public insurancesControllerFindOne(id: string, options?: AxiosRequestConfig) {
+        return InsurancesApiFp(this.configuration).insurancesControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InsurancesApi
+     */
+    public insurancesControllerRemove(id: string, options?: AxiosRequestConfig) {
+        return InsurancesApiFp(this.configuration).insurancesControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof InsurancesApi
+     */
+    public insurancesControllerUpdate(id: string, body: object, options?: AxiosRequestConfig) {
+        return InsurancesApiFp(this.configuration).insurancesControllerUpdate(id, body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MaintenancesApi - axios parameter creator
+ * @export
+ */
+export const MaintenancesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerCreate: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('maintenancesControllerCreate', 'body', body)
+            const localVarPath = `/maintenances`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerFindAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/maintenances`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerFindOne: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('maintenancesControllerFindOne', 'id', id)
+            const localVarPath = `/maintenances/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerRemove: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('maintenancesControllerRemove', 'id', id)
+            const localVarPath = `/maintenances/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerUpdate: async (id: string, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('maintenancesControllerUpdate', 'id', id)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('maintenancesControllerUpdate', 'body', body)
+            const localVarPath = `/maintenances/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MaintenancesApi - functional programming interface
+ * @export
+ */
+export const MaintenancesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MaintenancesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async maintenancesControllerCreate(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.maintenancesControllerCreate(body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async maintenancesControllerFindAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MaintenanceEntity>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.maintenancesControllerFindAll(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async maintenancesControllerFindOne(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.maintenancesControllerFindOne(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async maintenancesControllerRemove(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.maintenancesControllerRemove(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async maintenancesControllerUpdate(id: string, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MaintenanceEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.maintenancesControllerUpdate(id, body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MaintenancesApi - factory interface
+ * @export
+ */
+export const MaintenancesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MaintenancesApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerCreate(body: object, options?: any): AxiosPromise<MaintenanceEntity> {
+            return localVarFp.maintenancesControllerCreate(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerFindAll(options?: any): AxiosPromise<Array<MaintenanceEntity>> {
+            return localVarFp.maintenancesControllerFindAll(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerFindOne(id: string, options?: any): AxiosPromise<MaintenanceEntity> {
+            return localVarFp.maintenancesControllerFindOne(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerRemove(id: string, options?: any): AxiosPromise<MaintenanceEntity> {
+            return localVarFp.maintenancesControllerRemove(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        maintenancesControllerUpdate(id: string, body: object, options?: any): AxiosPromise<MaintenanceEntity> {
+            return localVarFp.maintenancesControllerUpdate(id, body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MaintenancesApi - object-oriented interface
+ * @export
+ * @class MaintenancesApi
+ * @extends {BaseAPI}
+ */
+export class MaintenancesApi extends BaseAPI {
+    /**
+     * 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MaintenancesApi
+     */
+    public maintenancesControllerCreate(body: object, options?: AxiosRequestConfig) {
+        return MaintenancesApiFp(this.configuration).maintenancesControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MaintenancesApi
+     */
+    public maintenancesControllerFindAll(options?: AxiosRequestConfig) {
+        return MaintenancesApiFp(this.configuration).maintenancesControllerFindAll(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MaintenancesApi
+     */
+    public maintenancesControllerFindOne(id: string, options?: AxiosRequestConfig) {
+        return MaintenancesApiFp(this.configuration).maintenancesControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MaintenancesApi
+     */
+    public maintenancesControllerRemove(id: string, options?: AxiosRequestConfig) {
+        return MaintenancesApiFp(this.configuration).maintenancesControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MaintenancesApi
+     */
+    public maintenancesControllerUpdate(id: string, body: object, options?: AxiosRequestConfig) {
+        return MaintenancesApiFp(this.configuration).maintenancesControllerUpdate(id, body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * RevisionsApi - axios parameter creator
+ * @export
+ */
+export const RevisionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerCreate: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('revisionsControllerCreate', 'body', body)
+            const localVarPath = `/revisions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerFindAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/revisions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerFindOne: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('revisionsControllerFindOne', 'id', id)
+            const localVarPath = `/revisions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerRemove: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('revisionsControllerRemove', 'id', id)
+            const localVarPath = `/revisions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerUpdate: async (id: string, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('revisionsControllerUpdate', 'id', id)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('revisionsControllerUpdate', 'body', body)
+            const localVarPath = `/revisions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RevisionsApi - functional programming interface
+ * @export
+ */
+export const RevisionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RevisionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revisionsControllerCreate(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revisionsControllerCreate(body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revisionsControllerFindAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revisionsControllerFindAll(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revisionsControllerFindOne(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revisionsControllerFindOne(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revisionsControllerRemove(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revisionsControllerRemove(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revisionsControllerUpdate(id: string, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revisionsControllerUpdate(id, body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RevisionsApi - factory interface
+ * @export
+ */
+export const RevisionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RevisionsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerCreate(body: object, options?: any): AxiosPromise<void> {
+            return localVarFp.revisionsControllerCreate(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerFindAll(options?: any): AxiosPromise<void> {
+            return localVarFp.revisionsControllerFindAll(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerFindOne(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.revisionsControllerFindOne(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerRemove(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.revisionsControllerRemove(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revisionsControllerUpdate(id: string, body: object, options?: any): AxiosPromise<void> {
+            return localVarFp.revisionsControllerUpdate(id, body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RevisionsApi - object-oriented interface
+ * @export
+ * @class RevisionsApi
+ * @extends {BaseAPI}
+ */
+export class RevisionsApi extends BaseAPI {
+    /**
+     * 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RevisionsApi
+     */
+    public revisionsControllerCreate(body: object, options?: AxiosRequestConfig) {
+        return RevisionsApiFp(this.configuration).revisionsControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RevisionsApi
+     */
+    public revisionsControllerFindAll(options?: AxiosRequestConfig) {
+        return RevisionsApiFp(this.configuration).revisionsControllerFindAll(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RevisionsApi
+     */
+    public revisionsControllerFindOne(id: string, options?: AxiosRequestConfig) {
+        return RevisionsApiFp(this.configuration).revisionsControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RevisionsApi
+     */
+    public revisionsControllerRemove(id: string, options?: AxiosRequestConfig) {
+        return RevisionsApiFp(this.configuration).revisionsControllerRemove(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RevisionsApi
+     */
+    public revisionsControllerUpdate(id: string, body: object, options?: AxiosRequestConfig) {
+        return RevisionsApiFp(this.configuration).revisionsControllerUpdate(id, body, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 
@@ -273,13 +1496,13 @@ export const VehiclesApiAxiosParamCreator = function (configuration?: Configurat
     return {
         /**
          * 
-         * @param {CreateVehicleDto} createVehicleDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vehiclesControllerCreate: async (createVehicleDto: CreateVehicleDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createVehicleDto' is not null or undefined
-            assertParamExists('vehiclesControllerCreate', 'createVehicleDto', createVehicleDto)
+        vehiclesControllerCreate: async (body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('vehiclesControllerCreate', 'body', body)
             const localVarPath = `/vehicles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -299,7 +1522,7 @@ export const VehiclesApiAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createVehicleDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -437,15 +1660,15 @@ export const VehiclesApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 
          * @param {string} id 
-         * @param {UpdateVehicleDto} updateVehicleDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vehiclesControllerUpdate: async (id: string, updateVehicleDto: UpdateVehicleDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        vehiclesControllerUpdate: async (id: string, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('vehiclesControllerUpdate', 'id', id)
-            // verify required parameter 'updateVehicleDto' is not null or undefined
-            assertParamExists('vehiclesControllerUpdate', 'updateVehicleDto', updateVehicleDto)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('vehiclesControllerUpdate', 'body', body)
             const localVarPath = `/vehicles/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -466,7 +1689,7 @@ export const VehiclesApiAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateVehicleDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -485,12 +1708,12 @@ export const VehiclesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {CreateVehicleDto} createVehicleDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async vehiclesControllerCreate(createVehicleDto: CreateVehicleDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VehicleEntity>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.vehiclesControllerCreate(createVehicleDto, options);
+        async vehiclesControllerCreate(body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VehicleEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.vehiclesControllerCreate(body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -535,12 +1758,12 @@ export const VehiclesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id 
-         * @param {UpdateVehicleDto} updateVehicleDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async vehiclesControllerUpdate(id: string, updateVehicleDto: UpdateVehicleDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VehicleEntity>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.vehiclesControllerUpdate(id, updateVehicleDto, options);
+        async vehiclesControllerUpdate(id: string, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VehicleEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.vehiclesControllerUpdate(id, body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -555,12 +1778,12 @@ export const VehiclesApiFactory = function (configuration?: Configuration, baseP
     return {
         /**
          * 
-         * @param {CreateVehicleDto} createVehicleDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vehiclesControllerCreate(createVehicleDto: CreateVehicleDto, options?: any): AxiosPromise<VehicleEntity> {
-            return localVarFp.vehiclesControllerCreate(createVehicleDto, options).then((request) => request(axios, basePath));
+        vehiclesControllerCreate(body: object, options?: any): AxiosPromise<VehicleEntity> {
+            return localVarFp.vehiclesControllerCreate(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -600,12 +1823,12 @@ export const VehiclesApiFactory = function (configuration?: Configuration, baseP
         /**
          * 
          * @param {string} id 
-         * @param {UpdateVehicleDto} updateVehicleDto 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vehiclesControllerUpdate(id: string, updateVehicleDto: UpdateVehicleDto, options?: any): AxiosPromise<VehicleEntity> {
-            return localVarFp.vehiclesControllerUpdate(id, updateVehicleDto, options).then((request) => request(axios, basePath));
+        vehiclesControllerUpdate(id: string, body: object, options?: any): AxiosPromise<VehicleEntity> {
+            return localVarFp.vehiclesControllerUpdate(id, body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -619,13 +1842,13 @@ export const VehiclesApiFactory = function (configuration?: Configuration, baseP
 export class VehiclesApi extends BaseAPI {
     /**
      * 
-     * @param {CreateVehicleDto} createVehicleDto 
+     * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VehiclesApi
      */
-    public vehiclesControllerCreate(createVehicleDto: CreateVehicleDto, options?: AxiosRequestConfig) {
-        return VehiclesApiFp(this.configuration).vehiclesControllerCreate(createVehicleDto, options).then((request) => request(this.axios, this.basePath));
+    public vehiclesControllerCreate(body: object, options?: AxiosRequestConfig) {
+        return VehiclesApiFp(this.configuration).vehiclesControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -674,13 +1897,13 @@ export class VehiclesApi extends BaseAPI {
     /**
      * 
      * @param {string} id 
-     * @param {UpdateVehicleDto} updateVehicleDto 
+     * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof VehiclesApi
      */
-    public vehiclesControllerUpdate(id: string, updateVehicleDto: UpdateVehicleDto, options?: AxiosRequestConfig) {
-        return VehiclesApiFp(this.configuration).vehiclesControllerUpdate(id, updateVehicleDto, options).then((request) => request(this.axios, this.basePath));
+    public vehiclesControllerUpdate(id: string, body: object, options?: AxiosRequestConfig) {
+        return VehiclesApiFp(this.configuration).vehiclesControllerUpdate(id, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
