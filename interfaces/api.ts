@@ -199,6 +199,24 @@ export interface VehicleEntity {
     'vehicleImage': string;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof VehicleEntity
+     */
+    'insurances': Array<string> | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof VehicleEntity
+     */
+    'maintenances': Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof VehicleEntity
+     */
+    'revisions': Array<string>;
+    /**
+     * 
      * @type {string}
      * @memberof VehicleEntity
      */

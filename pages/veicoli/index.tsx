@@ -2,16 +2,18 @@ import type { NextPage } from 'next'
 import { useMemo } from 'react'
 import { BaseLayout } from '../../components/common/Layout/BaseLayout'
 import { LoadingSpinner } from '../../components/common/Layout/LoadingSpinner'
-import { useGetAllVehiclesQuery } from '../../src/services/vehicles.service'
-import { vehiclesColumns } from '../../src/tables/vehicles/vehicles.table-utils'
+import { vehiclesColumns } from '../../components/vechicles/vehicles.table-utils'
 import { DataGrid } from '@mui/x-data-grid'
 import { useAppDispatch } from '../../src/state/reduxHooks'
 import { Button } from '@mui/material'
 import { MODALS } from '../../components/common/ModalSwitcher/ModalSwitcher'
 import { openModal } from '../../src/state/appViewSlice'
+import { useQuery } from '@apollo/client'
+import { AllVehiclesQuery } from '../../generated/graphql'
+import { getAllVehiclesQuery } from '../../src/graphql/queries/vehicles.queries'
 
 const VeicoliPage: NextPage = () => {
-  const { data, isLoading } = useGetAllVehiclesQuery()
+  const { data, loading } = useQuery<AllVehiclesQuery>(getAllVehiclesQuery)
 
   const dispatch = useAppDispatch()
 
@@ -21,7 +23,7 @@ const VeicoliPage: NextPage = () => {
   )
 
   const contentRender = useMemo(() => {
-    if (isLoading) {
+    if (loading) {
       return <LoadingSpinner />
     }
 
@@ -50,7 +52,7 @@ const VeicoliPage: NextPage = () => {
         </div>
         <div className="bg-white rounded-lg shadow-xl">
           <DataGrid
-            rows={data}
+            rows={data.vehicles}
             columns={columnsGenerated}
             autoHeight
             disableSelectionOnClick
@@ -58,7 +60,7 @@ const VeicoliPage: NextPage = () => {
         </div>
       </>
     )
-  }, [isLoading, data, columnsGenerated])
+  }, [loading, data, columnsGenerated, dispatch])
 
   return <BaseLayout>{contentRender}</BaseLayout>
 }

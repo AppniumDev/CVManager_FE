@@ -2,7 +2,6 @@ import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { VehicleEntity } from '../../interfaces'
 import { InputForm } from '../common/Form/InputForm'
 import { InputDateForm } from '../common/Form/InputDateForm'
 import { FormLayout } from '../common/Layout/FormLayout'
@@ -14,18 +13,26 @@ import { DashboardModal, useUppy } from '@uppy/react'
 import { Button, Typography } from '@mui/material'
 import { useAppDispatch } from '../../src/state/reduxHooks'
 import { closeModal } from '../../src/state/appViewSlice'
-import {
-  useCreateVehicleMutation,
-  useUpdateVehicleMutation,
-} from '../../src/services/vehicles.service'
 import XHRUpload from '@uppy/xhr-upload'
 import italianLanguage from '@uppy/locales/lib/it_IT'
 import { serverEndpoint } from '../../src/config'
 import shortid from 'shortid'
 import Image from 'next/image'
+import { useMutation } from '@apollo/client'
+import {
+  createVehicleMutation,
+  updateVehicleMutation,
+} from '../../src/graphql/mutations/vehicles.mutations'
+import {
+  CreateVehicleMutation,
+  CreateVehicleMutationVariables,
+  SingleVehicleQuery,
+  UpdateVehicleMutation,
+  UpdateVehicleMutationVariables,
+} from '../../generated/graphql'
 
 export interface IVehicleForm {
-  vehicleData?: VehicleEntity
+  vehicleData?: SingleVehicleQuery['vehiclesByPk']
 }
 
 const formValidationSchema = Yup.object().shape({
@@ -51,6 +58,7 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
         name: vehicleData.name,
         licensePlate: vehicleData.licensePlate,
         buildDate: vehicleData.buildDate,
+        image: vehicleData.image,
       },
     [vehicleData]
   )
@@ -62,7 +70,7 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
     setValue,
     formState: { isValid, isDirty, errors },
     getValues,
-  } = useForm<VehicleEntity>({
+  } = useForm({
     mode: 'onChange',
     resolver: yupResolver(formValidationSchema),
     ...(defaultValues && { defaultValues }),
@@ -97,7 +105,7 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
   uppy.on('complete', (result) => {
     try {
       // console.log('Vehiocle images uploaded', result)
-      setValue('vehicleImage', result.successful[0].name)
+      setValue('image', result.successful[0].name)
     } catch (err) {
       console.error(err)
     }
@@ -109,33 +117,50 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
   const nameField = register('name', { required: true })
   const licensePlateField = register('licensePlate', { required: true })
   const buildDateField = register('buildDate', { required: true })
-  const vehicleImageField = register('vehicleImage')
+  const imageField = register('image', { required: true })
 
-  // Redux RTK Query actions
-  const [updateVehicle, { isLoading: isLoadingUpdateVehicle }] =
-    useUpdateVehicleMutation()
-  const [createVehicle, { isLoading: isLoadingCreateVehicle }] =
-    useCreateVehicleMutation()
+  // Apollo GraphQL mutations
+  const [createVehicle, { data, loading, error }] =
+    useMutation<CreateVehicleMutation>(createVehicleMutation)
+  const [updateVehicle] = useMutation<UpdateVehicleMutation>(
+    updateVehicleMutation
+  )
 
   // Submit form function
-  const onSubmit = async (data: Partial<VehicleEntity>) => {
+  const onSubmit = async (data: SingleVehicleQuery['vehiclesByPk']) => {
+    if (!data) return
+
     try {
       const buildDateFormatted =
         data.buildDate && new Date(data.buildDate).toISOString()
 
-      let body: Partial<VehicleEntity> = {
-        ...vehicleData,
-        ...data,
-        buildDate: buildDateFormatted,
-      } as Partial<VehicleEntity>
-
-      delete body.updatedAt
-      delete body.createdAt
-
       if (isFormEdit) {
-        await updateVehicle(body as VehicleEntity)
+        const variablesUpdateVehicle: UpdateVehicleMutationVariables = {
+          pkColumns: {
+            id: vehicleData?.id,
+          },
+          set: {
+            name: getValues('name'),
+            licensePlate: getValues('licensePlate'),
+            buildDate: getValues('buildDate'),
+            image: getValues('image'),
+          },
+        }
+
+        await updateVehicle({
+          variables: variablesUpdateVehicle,
+        })
       } else {
-        await createVehicle(body as VehicleEntity)
+        const variablesCreateVehicle: CreateVehicleMutationVariables = {
+          object: {
+            name: getValues('name'),
+            licensePlate: getValues('licensePlate'),
+            buildDate: getValues('buildDate'),
+            image: getValues('image'),
+          },
+        }
+
+        await createVehicle({ variables: variablesCreateVehicle })
       }
     } catch (e) {
       console.log(e)
@@ -147,26 +172,26 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
   return (
     <FormLayout title={formTitle} width="w-7/12">
       <>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit as any)}>
           <Typography variant="h6" component="h1" className="mb-4">
             Dati veicolo
           </Typography>
           <div className="flex flex-wrap w-full gap-10 mb-3">
-            <InputForm<VehicleEntity>
+            <InputForm
               placeholder={`es: Caddy 1.9 TDI`}
               label={`Nome veicolo`}
               name={`name`}
               control={control}
               withWrapper
             />
-            <InputForm<VehicleEntity>
+            <InputForm
               placeholder={`es: FD1234DD`}
               label={`Targa veicolo`}
               name={`licensePlate`}
               control={control}
               withWrapper
             />
-            <InputDateForm<VehicleEntity>
+            <InputDateForm
               placeholder={`es: 09/2003`}
               label={`Data immatricolazione`}
               name={`buildDate`}
@@ -188,12 +213,12 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
                 >
                   Foto veicolo
                 </Typography>
-                {getValues().vehicleImage && (
+                {getValues().image && (
                   <div className="flex items-center justify-center h-48">
                     <Image
                       src={
                         'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
-                        getValues().vehicleImage
+                        getValues().image
                       }
                       alt="Image of vehicle"
                       className="object-contain rounded-lg"
@@ -221,12 +246,12 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
                 >
                   Libretto
                 </Typography>
-                {getValues().vehicleImage && (
+                {getValues().image && (
                   <div className="flex items-center justify-center h-48">
                     <Image
                       src={
                         'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
-                        getValues().vehicleImage
+                        getValues().image
                       }
                       alt="Image of vehicle"
                       className="object-contain rounded-lg"
@@ -249,19 +274,9 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
           </div>
 
           <div className="flex justify-end gap-4">
+            <Button onClick={() => dispatch(closeModal())}>{'Chiudi'}</Button>
             <Button
-              onClick={() => dispatch(closeModal())}
-              disabled={isLoadingUpdateVehicle || isLoadingCreateVehicle}
-            >
-              {'Chiudi'}
-            </Button>
-            <Button
-              disabled={
-                isLoadingUpdateVehicle ||
-                isLoadingCreateVehicle ||
-                !isValid ||
-                !isDirty
-              }
+              disabled={!isValid || !isDirty}
               variant="contained"
               type="submit"
             >

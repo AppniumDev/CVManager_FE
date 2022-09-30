@@ -22,7 +22,6 @@ import XHRUpload from '@uppy/xhr-upload'
 import italianLanguage from '@uppy/locales/lib/it_IT'
 import { serverEndpoint } from '../../src/config'
 import shortid from 'shortid'
-import Image from 'next/image'
 
 export interface IInsuranceForm {
   insuranceData?: InsuranceEntity
@@ -57,9 +56,7 @@ const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
     register,
     handleSubmit,
     control,
-    setValue,
     formState: { isValid, isDirty, errors },
-    getValues,
   } = useForm<InsuranceEntity>({
     mode: 'onChange',
     resolver: yupResolver(formValidationSchema),

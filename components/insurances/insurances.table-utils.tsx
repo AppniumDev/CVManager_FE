@@ -1,10 +1,10 @@
-import { InsuranceEntity } from '../../../interfaces'
+import { InsuranceEntity } from '../../interfaces'
 import { format } from 'date-fns'
 import { GridColDef, GridColumns } from '@mui/x-data-grid'
 import { Chip, Button } from '@mui/material'
-import { MODALS } from '../../../components/common/ModalSwitcher/ModalSwitcher'
-import { openModal } from '../../state/appViewSlice'
-import { AppDispatch } from '../../state/store'
+import { MODALS } from '../common/ModalSwitcher/ModalSwitcher'
+import { openModal } from '../../src/state/appViewSlice'
+import { AppDispatch } from '../../src/state/store'
 
 export interface IInsurancesColumns {
   dispatch: AppDispatch

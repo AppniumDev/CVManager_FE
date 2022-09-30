@@ -1,10 +1,10 @@
-import { VehicleEntity } from '../../../interfaces'
 import { format } from 'date-fns'
 import { GridColDef, GridColumns } from '@mui/x-data-grid'
 import { Chip, Button } from '@mui/material'
-import { MODALS } from '../../../components/common/ModalSwitcher/ModalSwitcher'
-import { openModal } from '../../state/appViewSlice'
-import { AppDispatch } from '../../state/store'
+import { MODALS } from '../common/ModalSwitcher/ModalSwitcher'
+import { openModal } from '../../src/state/appViewSlice'
+import { AppDispatch } from '../../src/state/store'
+import { AllVehiclesQuery } from '../../generated/graphql'
 
 export interface IVechiclesColumns {
   dispatch: AppDispatch
@@ -12,8 +12,8 @@ export interface IVechiclesColumns {
 
 export const vehiclesColumns = ({
   dispatch,
-}: IVechiclesColumns): GridColumns<VehicleEntity> => {
-  const columns: GridColDef<VehicleEntity>[] = [
+}: IVechiclesColumns): GridColumns<AllVehiclesQuery['vehicles'][number]> => {
+  const columns: GridColDef<AllVehiclesQuery['vehicles'][number]>[] = [
     { field: 'name', headerName: 'Nome Veicolo', flex: 1 },
     {
       field: 'licensePlate',
@@ -28,7 +28,8 @@ export const vehiclesColumns = ({
       headerName: 'Data Immatricolazione',
       flex: 1,
       renderCell({ value }) {
-        return <b>{format(new Date(value), 'dd/M/yyyy')}</b>
+        return <b>{value}</b>
+        // return <b>{format(value, 'dd/M/yyyy')}</b>
       },
     },
     {
@@ -36,7 +37,8 @@ export const vehiclesColumns = ({
       headerName: 'Ultimo Aggiornamento',
       flex: 1,
       renderCell({ value }) {
-        return <b>{format(new Date(value), 'dd/M/yyyy hh:mm')}</b>
+        return <b>{value}</b>
+        // return <b>{format(value, 'dd/M/yyyy hh:mm')}</b>
       },
     },
     {

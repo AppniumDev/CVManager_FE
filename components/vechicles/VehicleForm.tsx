@@ -2,38 +2,46 @@ import React from 'react'
 
 import { useAppSelector } from '../../src/state/reduxHooks'
 import { LoadingSpinner } from '../common/Layout/LoadingSpinner'
-import { useGetVehicleByIdQuery } from '../../src/services/vehicles.service'
 import { VehicleFormContent } from './VehicleFormContent'
 
 // Styles
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
-
-export interface IVehicleForm {}
+import { useQuery } from '@apollo/client'
+import { getVehicleByIdQuery } from '../../src/graphql/queries/vehicles.queries'
+import {
+  SingleVehicleQuery,
+  SingleVehicleQueryVariables,
+} from '../../generated/graphql'
 
 const VehicleForm = () => {
   const { modalEntityId, modalMode } = useAppSelector(({ appView }) => appView)
 
   const isFormEdit = modalEntityId && modalMode === 'edit'
 
-  const { data: vehicleData, isLoading } = useGetVehicleByIdQuery(
-    modalEntityId as string,
+  const variables: SingleVehicleQueryVariables = {
+    vehicleId: parseInt(modalEntityId || '0'),
+  }
+
+  const { data: vehicleData, loading } = useQuery<SingleVehicleQuery>(
+    getVehicleByIdQuery,
     {
+      variables,
       skip: !isFormEdit,
     }
   )
 
-  if (isFormEdit) {
-    if (isLoading) {
-      return <LoadingSpinner />
-    }
+  console.log(vehicleData)
 
-    if (!vehicleData) {
-      return <div>No data</div>
-    }
+  if (loading) {
+    return <LoadingSpinner />
   }
 
-  return <VehicleFormContent vehicleData={vehicleData} />
+  if (isFormEdit && !vehicleData) {
+    return <div>No data</div>
+  }
+
+  return <VehicleFormContent vehicleData={vehicleData?.vehiclesByPk} />
 }
 
 VehicleForm.displayName = 'VehicleForm'
