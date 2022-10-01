@@ -12,7 +12,7 @@ import Uppy from '@uppy/core'
 import { DashboardModal, useUppy } from '@uppy/react'
 import { Button, Typography } from '@mui/material'
 import { useAppDispatch } from '../../src/state/reduxHooks'
-import { closeModal } from '../../src/state/appViewSlice'
+import { closePrimaryModal } from '../../src/state/appViewSlice'
 import XHRUpload from '@uppy/xhr-upload'
 import italianLanguage from '@uppy/locales/lib/it_IT'
 import { serverEndpoint } from '../../src/config'
@@ -30,6 +30,7 @@ import {
   UpdateVehicleMutation,
   UpdateVehicleMutationVariables,
 } from '../../generated/graphql'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export interface IVehicleForm {
   vehicleData?: SingleVehicleQuery['vehiclesByPk']
@@ -166,7 +167,7 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
       console.log(e)
     }
 
-    dispatch(closeModal())
+    dispatch(closePrimaryModal())
   }
 
   return (
@@ -205,14 +206,10 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
           </Typography>
           <div className="flex w-full gap-8 pt-4 mb-3">
             <div className="flex items-center justify-start">
-              <div className="flex flex-col items-center gap-4 p-2 bg-gray-200 rounded-lg">
-                <Typography
-                  variant="h6"
-                  component="h3"
-                  className="text-indigo-800"
-                >
-                  Foto veicolo
-                </Typography>
+              <div
+                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                onClick={() => setIsUppyModalOpen(true)}
+              >
                 {getValues().image && (
                   <div className="flex items-center justify-center h-48">
                     <Image
@@ -227,25 +224,20 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
                     />
                   </div>
                 )}
-                <div className="flex items-center">
-                  <Button
-                    variant="outlined"
-                    onClick={() => setIsUppyModalOpen(true)}
-                  >
-                    {'Carica foto'}
-                  </Button>
-                </div>
+                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
               </div>
             </div>
+          </div>
+
+          <Typography variant="h6" component="h2" className="mb-4">
+            Foto
+          </Typography>
+          <div className="flex w-full gap-8 pt-4 mb-3">
             <div className="flex items-center justify-start">
-              <div className="flex flex-col items-center gap-4 p-2 bg-gray-200 rounded-lg">
-                <Typography
-                  variant="h6"
-                  component="h3"
-                  className="text-indigo-800"
-                >
-                  Libretto
-                </Typography>
+              <div
+                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                onClick={() => setIsUppyModalOpen(true)}
+              >
                 {getValues().image && (
                   <div className="flex items-center justify-center h-48">
                     <Image
@@ -260,21 +252,99 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
                     />
                   </div>
                 )}
+                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+              </div>
+            </div>
+          </div>
 
-                <div className="flex items-center">
-                  <Button
-                    variant="outlined"
-                    onClick={() => setIsUppyModalOpen(true)}
-                  >
-                    {'Carica foto'}
-                  </Button>
-                </div>
+          <Typography variant="h6" component="h2" className="mb-4">
+            Assicurazioni
+          </Typography>
+          <div className="flex w-full gap-8 pt-4 mb-3">
+            <div className="flex items-center justify-start">
+              <div
+                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                onClick={() => setIsUppyModalOpen(true)}
+              >
+                {getValues().image && (
+                  <div className="flex items-center justify-center h-48">
+                    <Image
+                      src={
+                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
+                        getValues().image
+                      }
+                      alt="Image of vehicle"
+                      className="object-contain rounded-lg"
+                      width={250}
+                      height={250}
+                    />
+                  </div>
+                )}
+                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+              </div>
+            </div>
+          </div>
+
+          <Typography variant="h6" component="h2" className="mb-4">
+            Revisioni
+          </Typography>
+          <div className="flex w-full gap-8 pt-4 mb-3">
+            <div className="flex items-center justify-start">
+              <div
+                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                onClick={() => setIsUppyModalOpen(true)}
+              >
+                {getValues().image && (
+                  <div className="flex items-center justify-center h-48">
+                    <Image
+                      src={
+                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
+                        getValues().image
+                      }
+                      alt="Image of vehicle"
+                      className="object-contain rounded-lg"
+                      width={250}
+                      height={250}
+                    />
+                  </div>
+                )}
+                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+              </div>
+            </div>
+          </div>
+
+          <Typography variant="h6" component="h2" className="mb-4">
+            Interventi
+          </Typography>
+          <div className="flex w-full gap-8 pt-4 mb-3">
+            <div className="flex items-center justify-start">
+              <div
+                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                onClick={() => setIsUppyModalOpen(true)}
+              >
+                {getValues().image && (
+                  <div className="flex items-center justify-center h-48">
+                    <Image
+                      src={
+                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
+                        getValues().image
+                      }
+                      alt="Image of vehicle"
+                      className="object-contain rounded-lg"
+                      width={250}
+                      height={250}
+                    />
+                  </div>
+                )}
+                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
               </div>
             </div>
           </div>
 
           <div className="flex justify-end gap-4">
-            <Button onClick={() => dispatch(closeModal())}>{'Chiudi'}</Button>
+            <Button onClick={() => dispatch(closePrimaryModal())}>
+              {'Chiudi'}
+            </Button>
             <Button
               disabled={!isValid || !isDirty}
               variant="contained"

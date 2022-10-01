@@ -6,8 +6,8 @@ import { vehiclesColumns } from '../../components/vechicles/vehicles.table-utils
 import { DataGrid } from '@mui/x-data-grid'
 import { useAppDispatch } from '../../src/state/reduxHooks'
 import { Button } from '@mui/material'
-import { MODALS } from '../../components/common/ModalSwitcher/ModalSwitcher'
-import { openModal } from '../../src/state/appViewSlice'
+import { MODALS_PRIMARY } from '../../components/common/ModalSwitcher/PrimaryModalSwitcher'
+import { openPrimaryModal } from '../../src/state/appViewSlice'
 import { useQuery } from '@apollo/client'
 import { AllVehiclesQuery } from '../../generated/graphql'
 import { getAllVehiclesQuery } from '../../src/graphql/queries/vehicles.queries'
@@ -39,9 +39,9 @@ const VeicoliPage: NextPage = () => {
               variant="outlined"
               onClick={() => {
                 dispatch(
-                  openModal({
-                    modal: MODALS.VEHICLE_FORM,
-                    type: 'add',
+                  openPrimaryModal({
+                    modal: MODALS_PRIMARY.VEHICLE_FORM,
+                    mode: 'add',
                   })
                 )
               }}

@@ -15,12 +15,14 @@ import {
 } from '../../generated/graphql'
 
 const VehicleForm = () => {
-  const { modalEntityId, modalMode } = useAppSelector(({ appView }) => appView)
+  const { entityId, mode } = useAppSelector(
+    ({ appView }) => appView.primaryModal
+  )
 
-  const isFormEdit = modalEntityId && modalMode === 'edit'
+  const isFormEdit = entityId && mode === 'edit'
 
   const variables: SingleVehicleQueryVariables = {
-    vehicleId: parseInt(modalEntityId || '0'),
+    vehicleId: parseInt(entityId || '0'),
   }
 
   const { data: vehicleData, loading } = useQuery<SingleVehicleQuery>(

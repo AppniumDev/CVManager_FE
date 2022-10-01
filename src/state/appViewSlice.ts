@@ -1,45 +1,92 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { MODALS } from '../../components/common/ModalSwitcher/ModalSwitcher'
+import { MODALS_PRIMARY } from '../../components/common/ModalSwitcher/PrimaryModalSwitcher'
+import { MODALS_SECONDARY } from '../../components/common/ModalSwitcher/SecondaryModalSwitcher'
 
 export type IAppViewState = {
-  modalOpened: MODALS
-  modalMode: 'add' | 'edit'
-  modalEntityId?: string
+  primaryModal: {
+    opened: MODALS_PRIMARY | false
+    mode: 'add' | 'edit'
+    entityId?: string
+  }
+  secondaryModal: {
+    opened: MODALS_SECONDARY | false
+    mode: 'add' | 'edit'
+    entityId?: string
+  }
 }
 
 const initialState: IAppViewState = {
-  modalOpened: MODALS.NONE,
-  modalMode: 'add',
-  modalEntityId: undefined,
+  primaryModal: {
+    opened: false,
+    mode: 'add',
+    entityId: undefined,
+  },
+  secondaryModal: {
+    opened: false,
+    mode: 'add',
+    entityId: undefined,
+  },
 }
 
 export const appViewSlice = createSlice({
   name: 'appView',
   initialState,
   reducers: {
-    openModal: (
+    openPrimaryModal: (
       state,
       action: PayloadAction<{
-        modal: MODALS
-        type: IAppViewState['modalMode']
-        modalEntityId?: string
+        modal: MODALS_PRIMARY
+        mode: IAppViewState['primaryModal']['mode']
+        entityId?: string
       }>
     ) => {
-      state.modalOpened = action.payload.modal
-      state.modalMode = action.payload.type
+      state.primaryModal.opened = action.payload.modal
+      state.primaryModal.mode = action.payload.mode
 
-      if (action.payload.modalEntityId) {
-        state.modalEntityId = action.payload.modalEntityId
+      if (action.payload.entityId) {
+        state.primaryModal.entityId = action.payload.entityId
       }
     },
-    closeModal: (state) => {
-      state.modalOpened = MODALS.NONE
-      state.modalMode = 'add'
-      state.modalEntityId = undefined
+    closePrimaryModal: (state) => {
+      // Close primary modal
+      state.primaryModal.opened = false
+      state.primaryModal.mode = 'add'
+      state.primaryModal.entityId = undefined
+
+      // Close also secondary modal
+      state.secondaryModal.opened = false
+      state.secondaryModal.mode = 'add'
+      state.secondaryModal.entityId = undefined
+    },
+    openSecondaryModal: (
+      state,
+      action: PayloadAction<{
+        modal: MODALS_SECONDARY
+        mode: IAppViewState['primaryModal']['mode']
+        entityId?: string
+      }>
+    ) => {
+      state.secondaryModal.opened = action.payload.modal
+      state.secondaryModal.mode = action.payload.mode
+
+      if (action.payload.entityId) {
+        state.secondaryModal.entityId = action.payload.entityId
+      }
+    },
+    closeSecondaryModal: (state) => {
+      // Close secondary modal
+      state.secondaryModal.opened = false
+      state.secondaryModal.mode = 'add'
+      state.secondaryModal.entityId = undefined
     },
   },
 })
 
-export const { openModal, closeModal } = appViewSlice.actions
+export const {
+  openPrimaryModal,
+  closePrimaryModal,
+  openSecondaryModal,
+  closeSecondaryModal,
+} = appViewSlice.actions
 
 export default appViewSlice.reducer

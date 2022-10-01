@@ -1,9 +1,9 @@
 import { InsuranceEntity } from '../../interfaces'
 import { format } from 'date-fns'
 import { GridColDef, GridColumns } from '@mui/x-data-grid'
-import { Chip, Button } from '@mui/material'
-import { MODALS } from '../common/ModalSwitcher/ModalSwitcher'
-import { openModal } from '../../src/state/appViewSlice'
+import { Button } from '@mui/material'
+import { MODALS_PRIMARY } from '../common/ModalSwitcher/PrimaryModalSwitcher'
+import { openPrimaryModal } from '../../src/state/appViewSlice'
 import { AppDispatch } from '../../src/state/store'
 
 export interface IInsurancesColumns {
@@ -59,10 +59,10 @@ export const insurancesColumns = ({
             variant="outlined"
             onClick={() => {
               dispatch(
-                openModal({
-                  modal: MODALS.VEHICLE_FORM,
-                  type: 'edit',
-                  modalEntityId: row?.id.toString(),
+                openPrimaryModal({
+                  modal: MODALS_PRIMARY.VEHICLE_FORM,
+                  mode: 'edit',
+                  entityId: row?.id.toString(),
                 })
               )
             }}

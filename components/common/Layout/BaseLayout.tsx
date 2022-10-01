@@ -1,7 +1,8 @@
 import { SideMenu } from './SideMenu'
 import Head from 'next/head'
 import { HeaderTop } from './HeaderTop'
-import { ModalSwitcher } from '../ModalSwitcher/ModalSwitcher'
+import { PrimaryModalSwitcher } from '../ModalSwitcher/PrimaryModalSwitcher'
+import { SecondaryModalSwitcher } from '../ModalSwitcher/SecondaryModalSwitcher'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { itIT } from '@mui/x-data-grid'
 import { itIT as pickersItIT } from '@mui/x-date-pickers'
@@ -40,7 +41,9 @@ const BaseLayout = ({ children }: any) => {
               {children}
             </div>
 
-            <ModalSwitcher />
+            {/* Modals switchers */}
+            <PrimaryModalSwitcher />
+            <SecondaryModalSwitcher />
           </div>
         </div>
       </ThemeProvider>

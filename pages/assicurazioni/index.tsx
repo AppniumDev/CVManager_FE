@@ -2,16 +2,15 @@ import type { NextPage } from 'next'
 import { useMemo } from 'react'
 import { BaseLayout } from '../../components/common/Layout/BaseLayout'
 import { LoadingSpinner } from '../../components/common/Layout/LoadingSpinner'
-import { useGetAllInsurancesQuery } from '../../src/services/insurances.service'
 import { insurancesColumns } from '../../components/insurances/insurances.table-utils'
 import { DataGrid } from '@mui/x-data-grid'
 import { useAppDispatch } from '../../src/state/reduxHooks'
 import { Button } from '@mui/material'
-import { MODALS } from '../../components/common/ModalSwitcher/ModalSwitcher'
-import { openModal } from '../../src/state/appViewSlice'
+import { MODALS_PRIMARY } from '../../components/common/ModalSwitcher/PrimaryModalSwitcher'
+import { openPrimaryModal } from '../../src/state/appViewSlice'
 
 const AssicurazioniPage: NextPage = () => {
-  const { data, isLoading } = useGetAllInsurancesQuery()
+  // const { data, isLoading } = useGetAllInsurancesQuery()
 
   const dispatch = useAppDispatch()
 
@@ -21,13 +20,13 @@ const AssicurazioniPage: NextPage = () => {
   )
 
   const contentRender = useMemo(() => {
-    if (isLoading) {
-      return <LoadingSpinner />
-    }
+    // if (isLoading) {
+    //   return <LoadingSpinner />
+    // }
 
-    if (!data) {
-      return <div>No data</div>
-    }
+    // if (!data) {
+    //   return <div>No data</div>
+    // }
 
     return (
       <>
@@ -37,9 +36,9 @@ const AssicurazioniPage: NextPage = () => {
               variant="outlined"
               onClick={() => {
                 dispatch(
-                  openModal({
-                    modal: MODALS.VEHICLE_FORM,
-                    type: 'add',
+                  openPrimaryModal({
+                    modal: MODALS_PRIMARY.VEHICLE_FORM,
+                    mode: 'add',
                   })
                 )
               }}
@@ -48,17 +47,17 @@ const AssicurazioniPage: NextPage = () => {
             </Button>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-xl">
+        {/* <div className="bg-white rounded-lg shadow-xl">
           <DataGrid
             rows={data}
             columns={columnsGenerated}
             autoHeight
             disableSelectionOnClick
           />
-        </div>
+        </div> */}
       </>
     )
-  }, [isLoading, data, columnsGenerated, dispatch])
+  }, [dispatch])
 
   return <BaseLayout>{contentRender}</BaseLayout>
 }
