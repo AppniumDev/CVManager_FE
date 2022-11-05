@@ -1,14 +1,16 @@
-import { TextField } from '@mui/material'
+import { InputAdornment, TextField } from '@mui/material'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 const InputForm = <T extends FieldValues>({
   label,
   withWrapper,
   placeholder,
+  money,
   ...controllerProps
 }: UseControllerProps<T> & {
   label: string
   placeholder?: string
+  money?: boolean
   withWrapper?: boolean
 }) => {
   const { field, fieldState } = useController(controllerProps)
@@ -26,6 +28,15 @@ const InputForm = <T extends FieldValues>({
         error={isErrored}
         helperText={isErrored ? fieldState.error?.message : ''}
         {...field}
+        InputProps={
+          money
+            ? {
+                startAdornment: (
+                  <InputAdornment position="start">€</InputAdornment>
+                ),
+              }
+            : {}
+        }
       />
     </div>
   )

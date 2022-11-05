@@ -12,7 +12,7 @@ import { getVehicleByIdQuery } from '../../src/graphql/queries/vehicles.queries'
 import {
   SingleVehicleQuery,
   SingleVehicleQueryVariables,
-} from '../../generated/graphql'
+} from '../../src/graphql/__generated__/graphql'
 
 const VehicleForm = () => {
   const { entityId, mode } = useAppSelector(
@@ -32,8 +32,6 @@ const VehicleForm = () => {
       skip: !isFormEdit,
     }
   )
-
-  console.log(vehicleData)
 
   if (loading) {
     return <LoadingSpinner />

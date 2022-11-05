@@ -2,7 +2,9 @@ import { Modal } from '@mui/material'
 import { useMemo } from 'react'
 import { closeSecondaryModal } from '../../../src/state/appViewSlice'
 import { useAppDispatch, useAppSelector } from '../../../src/state/reduxHooks'
-import { VehicleForm } from '../../vechicles/VehicleForm'
+
+// Vehicle secondary form
+import { InsuranceModal } from '../../vechicles/secondaryModals/InsuranceForm/InsuranceForm'
 
 export enum MODALS_SECONDARY {
   INSURANCE_FORM = 'INSURANCE_FORM',
@@ -17,7 +19,10 @@ const SecondaryModalSwitcher = () => {
   const renderModalContent = useMemo(() => {
     switch (opened) {
       case MODALS_SECONDARY.INSURANCE_FORM:
-        return <VehicleForm />
+        return <InsuranceModal />
+
+      default:
+        return <h1>No modal</h1>
     }
   }, [opened])
 

@@ -8,12 +8,10 @@ import { useAppDispatch } from '../../src/state/reduxHooks'
 import { Button } from '@mui/material'
 import { MODALS_PRIMARY } from '../../components/common/ModalSwitcher/PrimaryModalSwitcher'
 import { openPrimaryModal } from '../../src/state/appViewSlice'
-import { useQuery } from '@apollo/client'
-import { AllVehiclesQuery } from '../../generated/graphql'
-import { getAllVehiclesQuery } from '../../src/graphql/queries/vehicles.queries'
+import { useAllVehiclesQuery } from '../../src/graphql/__generated__/graphql'
 
 const VeicoliPage: NextPage = () => {
-  const { data, loading } = useQuery<AllVehiclesQuery>(getAllVehiclesQuery)
+  const { data, loading } = useAllVehiclesQuery()
 
   const dispatch = useAppDispatch()
 

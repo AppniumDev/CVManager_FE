@@ -42,6 +42,7 @@
     "daisyui": "^2.31.0",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.5",
+    "deepmerge": "^4.2.2",
     "firebase": "^9.10.0",
     "firebase-admin": "^11.0.1",
     "graphql": "^16.6.0",

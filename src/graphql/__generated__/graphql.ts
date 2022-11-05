@@ -2256,6 +2256,18 @@ export type UpdateVehicleMutationVariables = Exact<{
 
 export type UpdateVehicleMutation = { __typename?: 'mutation_root', updateVehiclesByPk?: { __typename?: 'Vehicles', id: number } | null };
 
+export type AllInsurancesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllInsurancesQuery = { __typename?: 'query_root', insurances: Array<{ __typename?: 'Insurances', id: number, description: string, firstInstallment: any, secondInstallment: any, price: any }> };
+
+export type SingleInsuranceQueryVariables = Exact<{
+  insuranceId: Scalars['Int'];
+}>;
+
+
+export type SingleInsuranceQuery = { __typename?: 'query_root', insurancesByPk?: { __typename?: 'Insurances', id: number, description: string, firstInstallment: any, secondInstallment: any, price: any, startDate: any, endDate: any, suspensionDate: any, reactivationDate: any } | null };
+
 export type AllVehiclesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2337,6 +2349,93 @@ export function useUpdateVehicleMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateVehicleMutationHookResult = ReturnType<typeof useUpdateVehicleMutation>;
 export type UpdateVehicleMutationResult = Apollo.MutationResult<UpdateVehicleMutation>;
 export type UpdateVehicleMutationOptions = Apollo.BaseMutationOptions<UpdateVehicleMutation, UpdateVehicleMutationVariables>;
+export const AllInsurancesDocument = gql`
+    query AllInsurances {
+  insurances {
+    id
+    description
+    firstInstallment
+    secondInstallment
+    price
+  }
+}
+    `;
+
+/**
+ * __useAllInsurancesQuery__
+ *
+ * To run a query within a React component, call `useAllInsurancesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllInsurancesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllInsurancesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllInsurancesQuery(baseOptions?: Apollo.QueryHookOptions<AllInsurancesQuery, AllInsurancesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllInsurancesQuery, AllInsurancesQueryVariables>(AllInsurancesDocument, options);
+      }
+export function useAllInsurancesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllInsurancesQuery, AllInsurancesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllInsurancesQuery, AllInsurancesQueryVariables>(AllInsurancesDocument, options);
+        }
+export type AllInsurancesQueryHookResult = ReturnType<typeof useAllInsurancesQuery>;
+export type AllInsurancesLazyQueryHookResult = ReturnType<typeof useAllInsurancesLazyQuery>;
+export type AllInsurancesQueryResult = Apollo.QueryResult<AllInsurancesQuery, AllInsurancesQueryVariables>;
+export function refetchAllInsurancesQuery(variables?: AllInsurancesQueryVariables) {
+      return { query: AllInsurancesDocument, variables: variables }
+    }
+export const SingleInsuranceDocument = gql`
+    query SingleInsurance($insuranceId: Int!) {
+  insurancesByPk(id: $insuranceId) {
+    id
+    description
+    firstInstallment
+    secondInstallment
+    price
+    startDate
+    endDate
+    suspensionDate
+    reactivationDate
+  }
+}
+    `;
+
+/**
+ * __useSingleInsuranceQuery__
+ *
+ * To run a query within a React component, call `useSingleInsuranceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSingleInsuranceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSingleInsuranceQuery({
+ *   variables: {
+ *      insuranceId: // value for 'insuranceId'
+ *   },
+ * });
+ */
+export function useSingleInsuranceQuery(baseOptions: Apollo.QueryHookOptions<SingleInsuranceQuery, SingleInsuranceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SingleInsuranceQuery, SingleInsuranceQueryVariables>(SingleInsuranceDocument, options);
+      }
+export function useSingleInsuranceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SingleInsuranceQuery, SingleInsuranceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SingleInsuranceQuery, SingleInsuranceQueryVariables>(SingleInsuranceDocument, options);
+        }
+export type SingleInsuranceQueryHookResult = ReturnType<typeof useSingleInsuranceQuery>;
+export type SingleInsuranceLazyQueryHookResult = ReturnType<typeof useSingleInsuranceLazyQuery>;
+export type SingleInsuranceQueryResult = Apollo.QueryResult<SingleInsuranceQuery, SingleInsuranceQueryVariables>;
+export function refetchSingleInsuranceQuery(variables: SingleInsuranceQueryVariables) {
+      return { query: SingleInsuranceDocument, variables: variables }
+    }
 export const AllVehiclesDocument = gql`
     query AllVehicles {
   vehicles {
@@ -2375,6 +2474,9 @@ export function useAllVehiclesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type AllVehiclesQueryHookResult = ReturnType<typeof useAllVehiclesQuery>;
 export type AllVehiclesLazyQueryHookResult = ReturnType<typeof useAllVehiclesLazyQuery>;
 export type AllVehiclesQueryResult = Apollo.QueryResult<AllVehiclesQuery, AllVehiclesQueryVariables>;
+export function refetchAllVehiclesQuery(variables?: AllVehiclesQueryVariables) {
+      return { query: AllVehiclesDocument, variables: variables }
+    }
 export const SingleVehicleDocument = gql`
     query SingleVehicle($vehicleId: Int!) {
   vehiclesByPk(id: $vehicleId) {
@@ -2414,3 +2516,6 @@ export function useSingleVehicleLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type SingleVehicleQueryHookResult = ReturnType<typeof useSingleVehicleQuery>;
 export type SingleVehicleLazyQueryHookResult = ReturnType<typeof useSingleVehicleLazyQuery>;
 export type SingleVehicleQueryResult = Apollo.QueryResult<SingleVehicleQuery, SingleVehicleQueryVariables>;
+export function refetchSingleVehicleQuery(variables: SingleVehicleQueryVariables) {
+      return { query: SingleVehicleDocument, variables: variables }
+    }

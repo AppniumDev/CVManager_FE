@@ -12,10 +12,13 @@ import Uppy from '@uppy/core'
 import { DashboardModal, useUppy } from '@uppy/react'
 import { Button, Typography } from '@mui/material'
 import { useAppDispatch } from '../../src/state/reduxHooks'
-import { closePrimaryModal } from '../../src/state/appViewSlice'
+import {
+  closePrimaryModal,
+  openSecondaryModal,
+} from '../../src/state/appViewSlice'
 import XHRUpload from '@uppy/xhr-upload'
 import italianLanguage from '@uppy/locales/lib/it_IT'
-import { serverEndpoint } from '../../src/config'
+import { baseImageURL, serverEndpoint } from '../../src/config'
 import shortid from 'shortid'
 import Image from 'next/image'
 import { useMutation } from '@apollo/client'
@@ -23,14 +26,19 @@ import {
   createVehicleMutation,
   updateVehicleMutation,
 } from '../../src/graphql/mutations/vehicles.mutations'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import {
   CreateVehicleMutation,
   CreateVehicleMutationVariables,
   SingleVehicleQuery,
   UpdateVehicleMutation,
   UpdateVehicleMutationVariables,
-} from '../../generated/graphql'
-import { PlusCircleIcon } from '@heroicons/react/24/outline'
+} from '../../src/graphql/__generated__/graphql'
+import {
+  getAllVehiclesQuery,
+  getVehicleByIdQuery,
+} from '../../src/graphql/queries/vehicles.queries'
+import { MODALS_SECONDARY } from '../common/ModalSwitcher/SecondaryModalSwitcher'
 
 export interface IVehicleForm {
   vehicleData?: SingleVehicleQuery['vehiclesByPk']
@@ -112,8 +120,6 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
     }
   })
 
-  console.log('Form state', { isValid, isDirty, errors })
-
   // Register fields
   const nameField = register('name', { required: true })
   const licensePlateField = register('licensePlate', { required: true })
@@ -150,6 +156,7 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
 
         await updateVehicle({
           variables: variablesUpdateVehicle,
+          refetchQueries: [{ query: getAllVehiclesQuery }, 'AllVehicles'],
         })
       } else {
         const variablesCreateVehicle: CreateVehicleMutationVariables = {
@@ -161,7 +168,10 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
           },
         }
 
-        await createVehicle({ variables: variablesCreateVehicle })
+        await createVehicle({
+          variables: variablesCreateVehicle,
+          refetchQueries: [{ query: getAllVehiclesQuery }, 'AllVehicles'],
+        })
       }
     } catch (e) {
       console.log(e)
@@ -171,9 +181,12 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
   }
 
   return (
-    <FormLayout title={formTitle} width="w-7/12">
+    <FormLayout title={formTitle} width="w-8/12" additionalClassname={''}>
       <>
-        <form onSubmit={handleSubmit(onSubmit as any)}>
+        <form
+          onSubmit={handleSubmit(onSubmit as any)}
+          className="flex flex-col py-8"
+        >
           <Typography variant="h6" component="h1" className="mb-4">
             Dati veicolo
           </Typography>
@@ -200,143 +213,138 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
               withWrapper
             />
           </div>
-
-          <Typography variant="h6" component="h2" className="mb-4">
-            Documenti
-          </Typography>
-          <div className="flex w-full gap-8 pt-4 mb-3">
-            <div className="flex items-center justify-start">
-              <div
-                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
-                onClick={() => setIsUppyModalOpen(true)}
-              >
-                {getValues().image && (
-                  <div className="flex items-center justify-center h-48">
-                    <Image
-                      src={
-                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
-                        getValues().image
-                      }
-                      alt="Image of vehicle"
-                      className="object-contain rounded-lg"
-                      width={250}
-                      height={250}
-                    />
+          <div className="flex">
+            <div className="flex flex-col w-full gap-4">
+              <Typography variant="h6" component="h2" className="mb-4">
+                Assicurazioni
+              </Typography>
+              <div className="flex w-full gap-8 pt-4 mb-3">
+                <div className="flex items-center justify-start">
+                  <div
+                    className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                    onClick={() =>
+                      dispatch(
+                        openSecondaryModal({
+                          modal: MODALS_SECONDARY.INSURANCE_FORM,
+                          mode: 'add',
+                        })
+                      )
+                    }
+                  >
+                    {getValues().image && (
+                      <div className="flex items-center justify-center h-48">
+                        <Image
+                          src={baseImageURL + getValues().image}
+                          alt="Image of vehicle"
+                          className="object-contain rounded-lg"
+                          width={250}
+                          height={250}
+                        />
+                      </div>
+                    )}
+                    <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
                   </div>
-                )}
-                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+                </div>
+              </div>
+
+              <Typography variant="h6" component="h2" className="mb-4">
+                Revisioni
+              </Typography>
+              <div className="flex w-full gap-8 pt-4 mb-3">
+                <div className="flex items-center justify-start">
+                  <div
+                    className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                    onClick={() => setIsUppyModalOpen(true)}
+                  >
+                    {getValues().image && (
+                      <div className="flex items-center justify-center h-48">
+                        <Image
+                          src={baseImageURL + getValues().image}
+                          alt="Image of vehicle"
+                          className="object-contain rounded-lg"
+                          width={250}
+                          height={250}
+                        />
+                      </div>
+                    )}
+                    <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+                  </div>
+                </div>
+              </div>
+
+              <Typography variant="h6" component="h2" className="mb-4">
+                Interventi
+              </Typography>
+              <div className="flex w-full gap-8 pt-4 mb-3">
+                <div className="flex items-center justify-start">
+                  <div
+                    className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                    onClick={() => setIsUppyModalOpen(true)}
+                  >
+                    {getValues().image && (
+                      <div className="flex items-center justify-center h-48">
+                        <Image
+                          src={baseImageURL + getValues().image}
+                          alt="Image of vehicle"
+                          className="object-contain rounded-lg"
+                          width={250}
+                          height={250}
+                        />
+                      </div>
+                    )}
+                    <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <Typography variant="h6" component="h2" className="mb-4">
-            Foto
-          </Typography>
-          <div className="flex w-full gap-8 pt-4 mb-3">
-            <div className="flex items-center justify-start">
-              <div
-                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
-                onClick={() => setIsUppyModalOpen(true)}
-              >
-                {getValues().image && (
-                  <div className="flex items-center justify-center h-48">
-                    <Image
-                      src={
-                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
-                        getValues().image
-                      }
-                      alt="Image of vehicle"
-                      className="object-contain rounded-lg"
-                      width={250}
-                      height={250}
-                    />
+            <div className="flex flex-col w-full gap-4">
+              <Typography variant="h6" component="h2" className="mb-4">
+                Documenti
+              </Typography>
+              <div className="flex w-full gap-8 pt-4 mb-3">
+                <div className="flex items-center justify-start">
+                  <div
+                    className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                    onClick={() => setIsUppyModalOpen(true)}
+                  >
+                    {getValues().image && (
+                      <div className="flex items-center justify-center h-48">
+                        <Image
+                          src={baseImageURL + getValues().image}
+                          alt="Image of vehicle"
+                          className="object-contain rounded-lg"
+                          width={250}
+                          height={250}
+                        />
+                      </div>
+                    )}
+                    <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
                   </div>
-                )}
-                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+                </div>
               </div>
-            </div>
-          </div>
-
-          <Typography variant="h6" component="h2" className="mb-4">
-            Assicurazioni
-          </Typography>
-          <div className="flex w-full gap-8 pt-4 mb-3">
-            <div className="flex items-center justify-start">
-              <div
-                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
-                onClick={() => setIsUppyModalOpen(true)}
-              >
-                {getValues().image && (
-                  <div className="flex items-center justify-center h-48">
-                    <Image
-                      src={
-                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
-                        getValues().image
-                      }
-                      alt="Image of vehicle"
-                      className="object-contain rounded-lg"
-                      width={250}
-                      height={250}
-                    />
+              <Typography variant="h6" component="h2" className="mb-4">
+                Foto
+              </Typography>
+              <div className="flex w-full gap-8 pt-4 mb-3">
+                <div className="flex items-center justify-start">
+                  <div
+                    className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
+                    onClick={() => setIsUppyModalOpen(true)}
+                  >
+                    {getValues().image && (
+                      <div className="flex items-center justify-center h-48">
+                        <Image
+                          src={baseImageURL + getValues().image}
+                          alt="Image of vehicle"
+                          className="object-contain rounded-lg"
+                          width={250}
+                          height={250}
+                        />
+                      </div>
+                    )}
+                    <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
                   </div>
-                )}
-                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
-              </div>
-            </div>
-          </div>
-
-          <Typography variant="h6" component="h2" className="mb-4">
-            Revisioni
-          </Typography>
-          <div className="flex w-full gap-8 pt-4 mb-3">
-            <div className="flex items-center justify-start">
-              <div
-                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
-                onClick={() => setIsUppyModalOpen(true)}
-              >
-                {getValues().image && (
-                  <div className="flex items-center justify-center h-48">
-                    <Image
-                      src={
-                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
-                        getValues().image
-                      }
-                      alt="Image of vehicle"
-                      className="object-contain rounded-lg"
-                      width={250}
-                      height={250}
-                    />
-                  </div>
-                )}
-                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
-              </div>
-            </div>
-          </div>
-
-          <Typography variant="h6" component="h2" className="mb-4">
-            Interventi
-          </Typography>
-          <div className="flex w-full gap-8 pt-4 mb-3">
-            <div className="flex items-center justify-start">
-              <div
-                className="flex flex-col items-center justify-center h-20 gap-4 p-2 bg-blue-100 rounded-lg shadow-md cursor-pointer group hover:bg-blue-400 w-28 hover:shadow-2xl"
-                onClick={() => setIsUppyModalOpen(true)}
-              >
-                {getValues().image && (
-                  <div className="flex items-center justify-center h-48">
-                    <Image
-                      src={
-                        'https://cvmanager.fra1.digitaloceanspaces.com/CVManager/' +
-                        getValues().image
-                      }
-                      alt="Image of vehicle"
-                      className="object-contain rounded-lg"
-                      width={250}
-                      height={250}
-                    />
-                  </div>
-                )}
-                <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
+                </div>
               </div>
             </div>
           </div>

@@ -13,11 +13,6 @@ import Uppy from '@uppy/core'
 import { DashboardModal, useUppy } from '@uppy/react'
 import { Button, Typography } from '@mui/material'
 import { useAppDispatch } from '../../src/state/reduxHooks'
-import { closeModal } from '../../src/state/appViewSlice'
-import {
-  useCreateInsuranceMutation,
-  useUpdateInsuranceMutation,
-} from '../../src/services/insurances.service'
 import XHRUpload from '@uppy/xhr-upload'
 import italianLanguage from '@uppy/locales/lib/it_IT'
 import { serverEndpoint } from '../../src/config'

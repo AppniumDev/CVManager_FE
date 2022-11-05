@@ -8,10 +8,10 @@ module.exports = {
       },
     },
   ],
-  documents: ['./src/graphql/mutations/*.tsx', './src/graphql/queries/*.tsx'],
+  documents: ['./src/*/*/**.tsx'],
   overwrite: true,
   generates: {
-    './generated/graphql.tsx': {
+    'src/graphql/__generated__/graphql.ts': {
       plugins: [
         'typescript',
         'typescript-operations',
@@ -23,6 +23,7 @@ module.exports = {
         withHOC: false,
         withComponent: false,
         reactApolloVersion: 3,
+        withRefetchFn: true,
         // documentMode: 'external',
         // apolloClientInstanceImport: './controllers/utils/apolloClient.tsx',
       },
