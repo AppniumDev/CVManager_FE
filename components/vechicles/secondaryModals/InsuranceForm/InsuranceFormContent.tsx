@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { closeSecondaryModal } from '../../../../src/state/appViewSlice'
 import { useAppDispatch } from '../../../../src/state/reduxHooks'
@@ -22,6 +22,11 @@ import {
   updateInsuranceMutation,
 } from '../../../../src/graphql/mutations/insurances.mutation'
 import { getAllInsurancesQuery } from '../../../../src/graphql/queries/insurances.queries'
+import {
+  decodePrice,
+  encodePrice,
+  isRequiredYup,
+} from '../../../../src/utils/formUtils'
 
 export interface IInsuranceForm {
   insuranceData?: SingleInsuranceQuery['insurancesByPk']
@@ -30,10 +35,13 @@ export interface IInsuranceForm {
 
 const formValidationSchema = Yup.object().shape({
   title: Yup.string().required(),
+  price: Yup.number().required(),
   firstInstallment: Yup.number().required(),
   secondInstallment: Yup.number(),
   startDate: Yup.date().required(),
   endDate: Yup.date().required(),
+  suspensionDate: Yup.date(),
+  reactivationDate: Yup.date(),
 })
 
 const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
@@ -47,41 +55,61 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
     : 'Nuova assicurazione'
 
   // React hook form init
-  const defaultValues = useMemo(
-    () =>
-      insuranceData && {
+  const defaultValues = useMemo(() => {
+    if (insuranceData) {
+      return {
         title: insuranceData.title,
-        firstInstallment: insuranceData.firstInstallment,
-        secondInstallment: insuranceData.secondInstallment,
-        price: insuranceData.price,
-        startDate: insuranceData.startDate,
-        endDate: insuranceData.endDate,
-        suspensionDate: insuranceData.suspensionDate,
-        reactivationDate: insuranceData.reactivationDate,
-      },
-    [insuranceData]
-  )
+        firstInstallment: decodePrice(insuranceData.firstInstallment),
+        secondInstallment: decodePrice(insuranceData.secondInstallment),
+        price: decodePrice(insuranceData.price),
+        startDate: insuranceData.startDate && new Date(insuranceData.startDate),
+        endDate: insuranceData.endDate && new Date(insuranceData.endDate),
+        suspensionDate:
+          insuranceData.suspensionDate &&
+          new Date(insuranceData.suspensionDate),
+        reactivationDate:
+          insuranceData.reactivationDate &&
+          new Date(insuranceData.reactivationDate),
+      }
+    }
+  }, [insuranceData])
 
   const {
     register,
     handleSubmit,
     control,
     setValue,
-    formState: { isValid, isDirty, errors },
+    getFieldState,
+    formState: { isValid, isDirty, errors, dirtyFields, isValidating },
+    clearErrors,
     getValues,
   } = useForm({
     mode: 'onChange',
+    reValidateMode: 'onChange',
+    shouldFocusError: true,
     resolver: yupResolver(formValidationSchema),
     ...(defaultValues && { defaultValues }),
   })
 
+  console.log('Form: ', {
+    errors,
+    isValid,
+    dirtyFields,
+    isValidating,
+    values: getValues(),
+  })
+
+  const getIsRequired = (fieldName: string) => {
+    return isRequiredYup(formValidationSchema, fieldName)
+  }
+
   // Register fields
-  const titleField = register('title', { required: true })
+  const titleField = register('title')
   const firstInstallmentField = register('firstInstallment')
   const secondInstallmentField = register('secondInstallment')
   const priceField = register('price')
-  const startDateField = register('startDate', { required: true })
-  const endDateField = register('endDate', { required: true })
+  const startDateField = register('startDate')
+  const endDateField = register('endDate')
   const suspensionDateField = register('suspensionDate')
   const reactivationDateField = register('reactivationDate')
 
@@ -104,9 +132,9 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
           },
           set: {
             title: getValues('title'),
-            firstInstallment: getValues('firstInstallment'),
-            secondInstallment: getValues('secondInstallment'),
-            price: getValues('price'),
+            firstInstallment: encodePrice(getValues('firstInstallment')),
+            secondInstallment: encodePrice(getValues('secondInstallment')),
+            price: encodePrice(getValues('price')),
             startDate: getValues('startDate'),
             endDate: getValues('endDate'),
             suspensionDate: getValues('suspensionDate'),
@@ -115,7 +143,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
         }
         await updateInsurance({
           variables: variablesUpdateInsurance,
-          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllInsurances'],
+          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllVehicles'],
         })
       } else {
         const variablesCreateInsurance: CreateInsuranceMutationVariables = {
@@ -133,7 +161,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
         }
         await createInsurance({
           variables: variablesCreateInsurance,
-          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllInsurances'],
+          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllVehicles'],
         })
       }
     } catch (e) {
@@ -160,7 +188,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
               name={`title`}
               control={control}
               withWrapper
-              required
+              required={getIsRequired('title')}
             />
           </div>
           <Typography variant="h6" component="h1" className="mb-4">
@@ -174,7 +202,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
               control={control}
               withWrapper
               money
-              required
+              required={getIsRequired('price')}
             />
             <InputForm
               placeholder={`es: 99,90`}
@@ -183,6 +211,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
               control={control}
               withWrapper
               money
+              required={getIsRequired('firstInstallment')}
             />
             <InputForm
               placeholder={`es: 99,90`}
@@ -191,6 +220,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
               control={control}
               withWrapper
               money
+              required={getIsRequired('secondInstallment')}
             />
           </div>
           <Typography variant="h6" component="h1" className="mb-4">
@@ -204,7 +234,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
                 name={`startDate`}
                 control={control}
                 withWrapper
-                required
+                required={getIsRequired('startDate')}
               />
               <InputDateForm
                 placeholder={`es: 09/2022`}
@@ -212,7 +242,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
                 name={`endDate`}
                 control={control}
                 withWrapper
-                required
+                required={getIsRequired('endDate')}
               />
             </div>
 
@@ -223,6 +253,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
                 name={`suspensionDate`}
                 control={control}
                 withWrapper
+                required={getIsRequired('suspensionDate')}
               />
               <InputDateForm
                 placeholder={`es: 09/2022`}
@@ -230,6 +261,7 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
                 name={`reactivationDate`}
                 control={control}
                 withWrapper
+                required={getIsRequired('reactivationDate')}
               />
             </div>
           </div>
