@@ -33,6 +33,8 @@ const InputForm = <T extends FieldValues>({
         helperText={isErrored ? fieldState.error?.message : ''}
         required={required}
         {...field}
+        inputRef={field.ref}
+        type={money ? 'number' : 'text'}
         InputProps={
           money
             ? {
