@@ -20,6 +20,31 @@ export const getVehicleByIdQuery = gql`
       licensePlate
       buildDate
       image
+      insurances {
+        id
+        price
+        title
+        firstInstallment
+        secondInstallment
+        reactivationDate
+        startDate
+        suspensionDate
+        vehicleId
+      }
+      maintenances {
+        id
+        name
+        description
+        dateDone
+        kilometers
+        vehicleId
+      }
+      revisions {
+        id
+        kilometers
+        dateDone
+        vehicleId
+      }
     }
   }
 `

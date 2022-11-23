@@ -8,21 +8,26 @@ const InputDateForm = <T extends FieldValues>({
   label,
   withWrapper,
   placeholder,
+  required,
   ...controllerProps
 }: UseControllerProps<T> & {
   label: string
   placeholder?: string
   withWrapper?: boolean
+  required?: boolean
 }) => {
-  const { field, fieldState } = useController(controllerProps)
+  const { field } = useController(controllerProps)
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={withWrapper ? 'flex justify-start py-6' : 'flex'}>
         <DatePicker
           label={label}
-          renderInput={(params) => <TextField {...params} />}
+          renderInput={(params) => (
+            <TextField {...params} required={required} />
+          )}
           {...field}
+          value={field.value || null}
         />
       </div>
     </LocalizationProvider>

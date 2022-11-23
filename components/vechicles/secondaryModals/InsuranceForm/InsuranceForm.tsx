@@ -15,9 +15,10 @@ import { getInsuranceByIdQuery } from '../../../../src/graphql/queries/insurance
 import { InsuranceFormContent } from './InsuranceFormContent'
 
 const InsuranceModal = () => {
-  const { entityId, mode } = useAppSelector(
-    ({ appView }) => appView.secondaryModal
-  )
+  const {
+    secondaryModal: { mode, entityId },
+    primaryModal: { entityId: vehicleEntityId },
+  } = useAppSelector(({ appView }) => appView)
 
   const isFormEdit = entityId && mode === 'edit'
 
@@ -41,7 +42,12 @@ const InsuranceModal = () => {
     return <div>No data</div>
   }
 
-  return <InsuranceFormContent insuranceData={insuranceData?.insurancesByPk} />
+  return (
+    <InsuranceFormContent
+      insuranceData={insuranceData?.insurancesByPk}
+      vehicleId={parseInt(vehicleEntityId || '0')}
+    />
+  )
 }
 
 InsuranceModal.displayName = 'InsuranceModal'

@@ -6,14 +6,18 @@ const InputForm = <T extends FieldValues>({
   withWrapper,
   placeholder,
   money,
+  required,
   ...controllerProps
 }: UseControllerProps<T> & {
   label: string
   placeholder?: string
   money?: boolean
   withWrapper?: boolean
+  required?: boolean
 }) => {
-  const { field, fieldState } = useController(controllerProps)
+  const propsController = useController(controllerProps)
+
+  const { field, fieldState } = propsController
 
   const isErrored =
     fieldState.isTouched && fieldState.isDirty && fieldState.invalid
@@ -27,6 +31,7 @@ const InputForm = <T extends FieldValues>({
         defaultValue={field.value}
         error={isErrored}
         helperText={isErrored ? fieldState.error?.message : ''}
+        required={required}
         {...field}
         InputProps={
           money

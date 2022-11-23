@@ -4,7 +4,7 @@ import { Chip, Button } from '@mui/material'
 import { MODALS_PRIMARY } from '../common/ModalSwitcher/PrimaryModalSwitcher'
 import { openPrimaryModal } from '../../src/state/appViewSlice'
 import { AppDispatch } from '../../src/state/store'
-import { AllVehiclesQuery } from '../../generated/graphql'
+import { AllVehiclesQuery } from '../../src/graphql/__generated__/graphql'
 
 export interface IVechiclesColumns {
   dispatch: AppDispatch

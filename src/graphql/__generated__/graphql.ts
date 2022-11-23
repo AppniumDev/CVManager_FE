@@ -43,15 +43,15 @@ export type DateComparisonExp = {
 export type Insurances = {
   __typename?: 'Insurances';
   createdAt: Scalars['timestamptz'];
-  description: Scalars['String'];
   endDate: Scalars['date'];
-  firstInstallment: Scalars['money'];
+  firstInstallment?: Maybe<Scalars['money']>;
   id: Scalars['Int'];
-  price: Scalars['money'];
-  reactivationDate: Scalars['date'];
-  secondInstallment: Scalars['money'];
+  price?: Maybe<Scalars['money']>;
+  reactivationDate?: Maybe<Scalars['date']>;
+  secondInstallment?: Maybe<Scalars['money']>;
   startDate: Scalars['date'];
-  suspensionDate: Scalars['date'];
+  suspensionDate?: Maybe<Scalars['date']>;
+  title: Scalars['String'];
   updatedAt: Scalars['timestamptz'];
   vehicleId: Scalars['Int'];
   /** An object relationship */
@@ -126,7 +126,6 @@ export type InsurancesBoolExp = {
   _not?: InputMaybe<InsurancesBoolExp>;
   _or?: InputMaybe<Array<InsurancesBoolExp>>;
   createdAt?: InputMaybe<TimestamptzComparisonExp>;
-  description?: InputMaybe<StringComparisonExp>;
   endDate?: InputMaybe<DateComparisonExp>;
   firstInstallment?: InputMaybe<MoneyComparisonExp>;
   id?: InputMaybe<IntComparisonExp>;
@@ -135,6 +134,7 @@ export type InsurancesBoolExp = {
   secondInstallment?: InputMaybe<MoneyComparisonExp>;
   startDate?: InputMaybe<DateComparisonExp>;
   suspensionDate?: InputMaybe<DateComparisonExp>;
+  title?: InputMaybe<StringComparisonExp>;
   updatedAt?: InputMaybe<TimestamptzComparisonExp>;
   vehicleId?: InputMaybe<IntComparisonExp>;
   vehicleOfInsurance?: InputMaybe<VehiclesBoolExp>;
@@ -158,7 +158,6 @@ export type InsurancesIncInput = {
 /** input type for inserting data into table "insurances" */
 export type InsurancesInsertInput = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
-  description?: InputMaybe<Scalars['String']>;
   endDate?: InputMaybe<Scalars['date']>;
   firstInstallment?: InputMaybe<Scalars['money']>;
   id?: InputMaybe<Scalars['Int']>;
@@ -167,6 +166,7 @@ export type InsurancesInsertInput = {
   secondInstallment?: InputMaybe<Scalars['money']>;
   startDate?: InputMaybe<Scalars['date']>;
   suspensionDate?: InputMaybe<Scalars['date']>;
+  title?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   vehicleId?: InputMaybe<Scalars['Int']>;
   vehicleOfInsurance?: InputMaybe<VehiclesObjRelInsertInput>;
@@ -176,7 +176,6 @@ export type InsurancesInsertInput = {
 export type InsurancesMaxFields = {
   __typename?: 'InsurancesMaxFields';
   createdAt?: Maybe<Scalars['timestamptz']>;
-  description?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['date']>;
   firstInstallment?: Maybe<Scalars['money']>;
   id?: Maybe<Scalars['Int']>;
@@ -185,6 +184,7 @@ export type InsurancesMaxFields = {
   secondInstallment?: Maybe<Scalars['money']>;
   startDate?: Maybe<Scalars['date']>;
   suspensionDate?: Maybe<Scalars['date']>;
+  title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   vehicleId?: Maybe<Scalars['Int']>;
 };
@@ -193,7 +193,6 @@ export type InsurancesMaxFields = {
 export type InsurancesMinFields = {
   __typename?: 'InsurancesMinFields';
   createdAt?: Maybe<Scalars['timestamptz']>;
-  description?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['date']>;
   firstInstallment?: Maybe<Scalars['money']>;
   id?: Maybe<Scalars['Int']>;
@@ -202,6 +201,7 @@ export type InsurancesMinFields = {
   secondInstallment?: Maybe<Scalars['money']>;
   startDate?: Maybe<Scalars['date']>;
   suspensionDate?: Maybe<Scalars['date']>;
+  title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   vehicleId?: Maybe<Scalars['Int']>;
 };
@@ -225,7 +225,6 @@ export type InsurancesOnConflict = {
 /** Ordering options when selecting data from "insurances". */
 export type InsurancesOrderBy = {
   createdAt?: InputMaybe<OrderBy>;
-  description?: InputMaybe<OrderBy>;
   endDate?: InputMaybe<OrderBy>;
   firstInstallment?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
@@ -234,6 +233,7 @@ export type InsurancesOrderBy = {
   secondInstallment?: InputMaybe<OrderBy>;
   startDate?: InputMaybe<OrderBy>;
   suspensionDate?: InputMaybe<OrderBy>;
+  title?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
   vehicleId?: InputMaybe<OrderBy>;
   vehicleOfInsurance?: InputMaybe<VehiclesOrderBy>;
@@ -248,8 +248,6 @@ export type InsurancesPkColumnsInput = {
 export enum InsurancesSelectColumn {
   /** column name */
   CreatedAt = 'createdAt',
-  /** column name */
-  Description = 'description',
   /** column name */
   EndDate = 'endDate',
   /** column name */
@@ -267,6 +265,8 @@ export enum InsurancesSelectColumn {
   /** column name */
   SuspensionDate = 'suspensionDate',
   /** column name */
+  Title = 'title',
+  /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
   VehicleId = 'vehicleId'
@@ -275,7 +275,6 @@ export enum InsurancesSelectColumn {
 /** input type for updating data in table "insurances" */
 export type InsurancesSetInput = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
-  description?: InputMaybe<Scalars['String']>;
   endDate?: InputMaybe<Scalars['date']>;
   firstInstallment?: InputMaybe<Scalars['money']>;
   id?: InputMaybe<Scalars['Int']>;
@@ -284,6 +283,7 @@ export type InsurancesSetInput = {
   secondInstallment?: InputMaybe<Scalars['money']>;
   startDate?: InputMaybe<Scalars['date']>;
   suspensionDate?: InputMaybe<Scalars['date']>;
+  title?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   vehicleId?: InputMaybe<Scalars['Int']>;
 };
@@ -333,8 +333,6 @@ export enum InsurancesUpdateColumn {
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
-  Description = 'description',
-  /** column name */
   EndDate = 'endDate',
   /** column name */
   FirstInstallment = 'firstInstallment',
@@ -350,6 +348,8 @@ export enum InsurancesUpdateColumn {
   StartDate = 'startDate',
   /** column name */
   SuspensionDate = 'suspensionDate',
+  /** column name */
+  Title = 'title',
   /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
@@ -1383,7 +1383,6 @@ export type Insurances_Avg_Order_By = {
 /** order by max() on columns of table "insurances" */
 export type Insurances_Max_Order_By = {
   createdAt?: InputMaybe<OrderBy>;
-  description?: InputMaybe<OrderBy>;
   endDate?: InputMaybe<OrderBy>;
   firstInstallment?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
@@ -1392,6 +1391,7 @@ export type Insurances_Max_Order_By = {
   secondInstallment?: InputMaybe<OrderBy>;
   startDate?: InputMaybe<OrderBy>;
   suspensionDate?: InputMaybe<OrderBy>;
+  title?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
   vehicleId?: InputMaybe<OrderBy>;
 };
@@ -1399,7 +1399,6 @@ export type Insurances_Max_Order_By = {
 /** order by min() on columns of table "insurances" */
 export type Insurances_Min_Order_By = {
   createdAt?: InputMaybe<OrderBy>;
-  description?: InputMaybe<OrderBy>;
   endDate?: InputMaybe<OrderBy>;
   firstInstallment?: InputMaybe<OrderBy>;
   id?: InputMaybe<OrderBy>;
@@ -1408,6 +1407,7 @@ export type Insurances_Min_Order_By = {
   secondInstallment?: InputMaybe<OrderBy>;
   startDate?: InputMaybe<OrderBy>;
   suspensionDate?: InputMaybe<OrderBy>;
+  title?: InputMaybe<OrderBy>;
   updatedAt?: InputMaybe<OrderBy>;
   vehicleId?: InputMaybe<OrderBy>;
 };
@@ -1450,7 +1450,6 @@ export type Insurances_StreamCursorInput = {
 /** Initial value of the column from where the streaming should start */
 export type Insurances_StreamCursorValueInput = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
-  description?: InputMaybe<Scalars['String']>;
   endDate?: InputMaybe<Scalars['date']>;
   firstInstallment?: InputMaybe<Scalars['money']>;
   id?: InputMaybe<Scalars['Int']>;
@@ -1459,6 +1458,7 @@ export type Insurances_StreamCursorValueInput = {
   secondInstallment?: InputMaybe<Scalars['money']>;
   startDate?: InputMaybe<Scalars['date']>;
   suspensionDate?: InputMaybe<Scalars['date']>;
+  title?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   vehicleId?: InputMaybe<Scalars['Int']>;
 };
@@ -2241,6 +2241,21 @@ export type Vehicles_StreamCursorValueInput = {
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
+export type CreateInsuranceMutationVariables = Exact<{
+  object: InsurancesInsertInput;
+}>;
+
+
+export type CreateInsuranceMutation = { __typename?: 'mutation_root', insertInsurancesOne?: { __typename?: 'Insurances', id: number } | null };
+
+export type UpdateInsuranceMutationVariables = Exact<{
+  pkColumns: InsurancesPkColumnsInput;
+  set?: InputMaybe<InsurancesSetInput>;
+}>;
+
+
+export type UpdateInsuranceMutation = { __typename?: 'mutation_root', updateInsurancesByPk?: { __typename?: 'Insurances', id: number } | null };
+
 export type CreateVehicleMutationVariables = Exact<{
   object: VehiclesInsertInput;
 }>;
@@ -2259,14 +2274,14 @@ export type UpdateVehicleMutation = { __typename?: 'mutation_root', updateVehicl
 export type AllInsurancesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllInsurancesQuery = { __typename?: 'query_root', insurances: Array<{ __typename?: 'Insurances', id: number, description: string, firstInstallment: any, secondInstallment: any, price: any }> };
+export type AllInsurancesQuery = { __typename?: 'query_root', insurances: Array<{ __typename?: 'Insurances', id: number, title: string, firstInstallment?: any | null, secondInstallment?: any | null, price?: any | null, vehicleId: number }> };
 
 export type SingleInsuranceQueryVariables = Exact<{
   insuranceId: Scalars['Int'];
 }>;
 
 
-export type SingleInsuranceQuery = { __typename?: 'query_root', insurancesByPk?: { __typename?: 'Insurances', id: number, description: string, firstInstallment: any, secondInstallment: any, price: any, startDate: any, endDate: any, suspensionDate: any, reactivationDate: any } | null };
+export type SingleInsuranceQuery = { __typename?: 'query_root', insurancesByPk?: { __typename?: 'Insurances', id: number, title: string, firstInstallment?: any | null, secondInstallment?: any | null, price?: any | null, startDate: any, endDate: any, suspensionDate?: any | null, reactivationDate?: any | null, vehicleId: number } | null };
 
 export type AllVehiclesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2278,9 +2293,76 @@ export type SingleVehicleQueryVariables = Exact<{
 }>;
 
 
-export type SingleVehicleQuery = { __typename?: 'query_root', vehiclesByPk?: { __typename?: 'Vehicles', id: number, name: string, licensePlate?: string | null, buildDate?: any | null, image?: string | null } | null };
+export type SingleVehicleQuery = { __typename?: 'query_root', vehiclesByPk?: { __typename?: 'Vehicles', id: number, name: string, licensePlate?: string | null, buildDate?: any | null, image?: string | null, insurances: Array<{ __typename?: 'Insurances', id: number, price?: any | null, title: string, firstInstallment?: any | null, secondInstallment?: any | null, reactivationDate?: any | null, startDate: any, suspensionDate?: any | null, vehicleId: number }>, maintenances: Array<{ __typename?: 'Maintenances', id: number, name: string, description: string, dateDone: any, kilometers?: number | null, vehicleId: number }>, revisions: Array<{ __typename?: 'Revisions', id: number, kilometers: number, dateDone: any, vehicleId?: number | null }> } | null };
 
 
+export const CreateInsuranceDocument = gql`
+    mutation CreateInsurance($object: InsurancesInsertInput!) {
+  insertInsurancesOne(object: $object) {
+    id
+  }
+}
+    `;
+export type CreateInsuranceMutationFn = Apollo.MutationFunction<CreateInsuranceMutation, CreateInsuranceMutationVariables>;
+
+/**
+ * __useCreateInsuranceMutation__
+ *
+ * To run a mutation, you first call `useCreateInsuranceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateInsuranceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createInsuranceMutation, { data, loading, error }] = useCreateInsuranceMutation({
+ *   variables: {
+ *      object: // value for 'object'
+ *   },
+ * });
+ */
+export function useCreateInsuranceMutation(baseOptions?: Apollo.MutationHookOptions<CreateInsuranceMutation, CreateInsuranceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInsuranceMutation, CreateInsuranceMutationVariables>(CreateInsuranceDocument, options);
+      }
+export type CreateInsuranceMutationHookResult = ReturnType<typeof useCreateInsuranceMutation>;
+export type CreateInsuranceMutationResult = Apollo.MutationResult<CreateInsuranceMutation>;
+export type CreateInsuranceMutationOptions = Apollo.BaseMutationOptions<CreateInsuranceMutation, CreateInsuranceMutationVariables>;
+export const UpdateInsuranceDocument = gql`
+    mutation UpdateInsurance($pkColumns: InsurancesPkColumnsInput!, $set: InsurancesSetInput) {
+  updateInsurancesByPk(pk_columns: $pkColumns, _set: $set) {
+    id
+  }
+}
+    `;
+export type UpdateInsuranceMutationFn = Apollo.MutationFunction<UpdateInsuranceMutation, UpdateInsuranceMutationVariables>;
+
+/**
+ * __useUpdateInsuranceMutation__
+ *
+ * To run a mutation, you first call `useUpdateInsuranceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateInsuranceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateInsuranceMutation, { data, loading, error }] = useUpdateInsuranceMutation({
+ *   variables: {
+ *      pkColumns: // value for 'pkColumns'
+ *      set: // value for 'set'
+ *   },
+ * });
+ */
+export function useUpdateInsuranceMutation(baseOptions?: Apollo.MutationHookOptions<UpdateInsuranceMutation, UpdateInsuranceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateInsuranceMutation, UpdateInsuranceMutationVariables>(UpdateInsuranceDocument, options);
+      }
+export type UpdateInsuranceMutationHookResult = ReturnType<typeof useUpdateInsuranceMutation>;
+export type UpdateInsuranceMutationResult = Apollo.MutationResult<UpdateInsuranceMutation>;
+export type UpdateInsuranceMutationOptions = Apollo.BaseMutationOptions<UpdateInsuranceMutation, UpdateInsuranceMutationVariables>;
 export const CreateVehicleDocument = gql`
     mutation CreateVehicle($object: VehiclesInsertInput!) {
   insertVehiclesOne(object: $object) {
@@ -2353,10 +2435,11 @@ export const AllInsurancesDocument = gql`
     query AllInsurances {
   insurances {
     id
-    description
+    title
     firstInstallment
     secondInstallment
     price
+    vehicleId
   }
 }
     `;
@@ -2394,7 +2477,7 @@ export const SingleInsuranceDocument = gql`
     query SingleInsurance($insuranceId: Int!) {
   insurancesByPk(id: $insuranceId) {
     id
-    description
+    title
     firstInstallment
     secondInstallment
     price
@@ -2402,6 +2485,7 @@ export const SingleInsuranceDocument = gql`
     endDate
     suspensionDate
     reactivationDate
+    vehicleId
   }
 }
     `;
@@ -2485,6 +2569,31 @@ export const SingleVehicleDocument = gql`
     licensePlate
     buildDate
     image
+    insurances {
+      id
+      price
+      title
+      firstInstallment
+      secondInstallment
+      reactivationDate
+      startDate
+      suspensionDate
+      vehicleId
+    }
+    maintenances {
+      id
+      name
+      description
+      dateDone
+      kilometers
+      vehicleId
+    }
+    revisions {
+      id
+      kilometers
+      dateDone
+      vehicleId
+    }
   }
 }
     `;

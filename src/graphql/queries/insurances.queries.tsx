@@ -4,10 +4,11 @@ export const getAllInsurancesQuery = gql`
   query AllInsurances {
     insurances {
       id
-      description
+      title
       firstInstallment
       secondInstallment
       price
+      vehicleId
     }
   }
 `
@@ -16,7 +17,7 @@ export const getInsuranceByIdQuery = gql`
   query SingleInsurance($insuranceId: Int!) {
     insurancesByPk(id: $insuranceId) {
       id
-      description
+      title
       firstInstallment
       secondInstallment
       price
@@ -24,6 +25,7 @@ export const getInsuranceByIdQuery = gql`
       endDate
       suspensionDate
       reactivationDate
+      vehicleId
     }
   }
 `

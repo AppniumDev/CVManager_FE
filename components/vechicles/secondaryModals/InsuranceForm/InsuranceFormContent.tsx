@@ -8,33 +8,49 @@ import * as Yup from 'yup'
 import { Button, Typography } from '@mui/material'
 import { InputDateForm } from '../../../common/Form/InputDateForm'
 import { InputForm } from '../../../common/Form/InputForm'
-import { SingleInsuranceQuery } from '../../../../src/graphql/__generated__/graphql'
+import {
+  CreateInsuranceMutation,
+  CreateInsuranceMutationVariables,
+  SingleInsuranceQuery,
+  UpdateInsuranceMutation,
+  UpdateInsuranceMutationVariables,
+} from '../../../../src/graphql/__generated__/graphql'
+import { DevTool } from '@hookform/devtools'
+import { useMutation } from '@apollo/client'
+import {
+  createInsuranceMutation,
+  updateInsuranceMutation,
+} from '../../../../src/graphql/mutations/insurances.mutation'
+import { getAllInsurancesQuery } from '../../../../src/graphql/queries/insurances.queries'
 
 export interface IInsuranceForm {
   insuranceData?: SingleInsuranceQuery['insurancesByPk']
+  vehicleId?: number
 }
 
 const formValidationSchema = Yup.object().shape({
-  description: Yup.string().required(),
+  title: Yup.string().required(),
   firstInstallment: Yup.number().required(),
-  secondInstallment: Yup.number().required(),
+  secondInstallment: Yup.number(),
+  startDate: Yup.date().required(),
+  endDate: Yup.date().required(),
 })
 
-const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
+const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
   const dispatch = useAppDispatch()
 
   // Local state
   const [isUppyModalOpen, setIsUppyModalOpen] = useState(false)
   const isFormEdit = !!insuranceData
   const formTitle = isFormEdit
-    ? `Modifica assicurazione | ${insuranceData?.id}`
+    ? `Modifica assicurazione | ${insuranceData?.title}`
     : 'Nuova assicurazione'
 
   // React hook form init
   const defaultValues = useMemo(
     () =>
       insuranceData && {
-        description: insuranceData.description,
+        title: insuranceData.title,
         firstInstallment: insuranceData.firstInstallment,
         secondInstallment: insuranceData.secondInstallment,
         price: insuranceData.price,
@@ -59,40 +75,66 @@ const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
     ...(defaultValues && { defaultValues }),
   })
 
+  // Register fields
+  const titleField = register('title', { required: true })
+  const firstInstallmentField = register('firstInstallment')
+  const secondInstallmentField = register('secondInstallment')
+  const priceField = register('price')
+  const startDateField = register('startDate', { required: true })
+  const endDateField = register('endDate', { required: true })
+  const suspensionDateField = register('suspensionDate')
+  const reactivationDateField = register('reactivationDate')
+
+  // Apollo GraphQL mutations
+  const [createInsurance, { data, loading, error }] =
+    useMutation<CreateInsuranceMutation>(createInsuranceMutation)
+  const [updateInsurance] = useMutation<UpdateInsuranceMutation>(
+    updateInsuranceMutation
+  )
+
   // Submit form function
   const onSubmit = async (data: SingleInsuranceQuery['insurancesByPk']) => {
     if (!data) return
 
     try {
       if (isFormEdit) {
-        // const variablesUpdateVehicle: UpdateVehicleMutationVariables = {
-        //   pkColumns: {
-        //     id: vehicleData?.id,
-        //   },
-        //   set: {
-        //     name: getValues('name'),
-        //     licensePlate: getValues('licensePlate'),
-        //     buildDate: getValues('buildDate'),
-        //     image: getValues('image'),
-        //   },
-        // }
-        // await updateVehicle({
-        //   variables: variablesUpdateVehicle,
-        //   refetchQueries: [{ query: getAllVehiclesQuery }, 'AllVehicles'],
-        // })
+        const variablesUpdateInsurance: UpdateInsuranceMutationVariables = {
+          pkColumns: {
+            id: insuranceData?.id,
+          },
+          set: {
+            title: getValues('title'),
+            firstInstallment: getValues('firstInstallment'),
+            secondInstallment: getValues('secondInstallment'),
+            price: getValues('price'),
+            startDate: getValues('startDate'),
+            endDate: getValues('endDate'),
+            suspensionDate: getValues('suspensionDate'),
+            reactivationDate: getValues('reactivationDate'),
+          },
+        }
+        await updateInsurance({
+          variables: variablesUpdateInsurance,
+          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllInsurances'],
+        })
       } else {
-        //   const variablesCreateVehicle: CreateVehicleMutationVariables = {
-        //     object: {
-        //       name: getValues('name'),
-        //       licensePlate: getValues('licensePlate'),
-        //       buildDate: getValues('buildDate'),
-        //       image: getValues('image'),
-        //     },
-        //   }
-        //   await createVehicle({
-        //     variables: variablesCreateVehicle,
-        //     refetchQueries: [{ query: getAllVehiclesQuery }, 'AllVehicles'],
-        //   })
+        const variablesCreateInsurance: CreateInsuranceMutationVariables = {
+          object: {
+            vehicleId: vehicleId,
+            title: getValues('title'),
+            firstInstallment: getValues('firstInstallment'),
+            secondInstallment: getValues('secondInstallment'),
+            price: getValues('price'),
+            startDate: getValues('startDate'),
+            endDate: getValues('endDate'),
+            suspensionDate: getValues('suspensionDate'),
+            reactivationDate: getValues('reactivationDate'),
+          },
+        }
+        await createInsurance({
+          variables: variablesCreateInsurance,
+          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllInsurances'],
+        })
       }
     } catch (e) {
       console.log(e)
@@ -115,9 +157,10 @@ const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
             <InputForm
               placeholder={`es: Assicurazione Caddy`}
               label={`Nome assicurazione`}
-              name={`description`}
+              name={`title`}
               control={control}
               withWrapper
+              required
             />
           </div>
           <Typography variant="h6" component="h1" className="mb-4">
@@ -126,15 +169,16 @@ const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
           <div className="flex flex-wrap w-full gap-10 mb-3">
             <InputForm
               placeholder={`es: 99,90`}
-              label={`Prezzo assicurazione`}
+              label={`Prezzo`}
               name={`price`}
               control={control}
               withWrapper
               money
+              required
             />
             <InputForm
               placeholder={`es: 99,90`}
-              label={`Prima rata assicurazione`}
+              label={`Prima rata`}
               name={`firstInstallment`}
               control={control}
               withWrapper
@@ -142,7 +186,7 @@ const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
             />
             <InputForm
               placeholder={`es: 99,90`}
-              label={`Seconda rata assicurazione`}
+              label={`Seconda rata`}
               name={`secondInstallment`}
               control={control}
               withWrapper
@@ -152,35 +196,42 @@ const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
           <Typography variant="h6" component="h1" className="mb-4">
             Date / Scadenze
           </Typography>
-          <div className="flex flex-wrap w-full gap-10 mb-3">
-            <InputDateForm
-              placeholder={`es: 09/2022`}
-              label={`Data inizio assicurazione`}
-              name={`startDate`}
-              control={control}
-              withWrapper
-            />
-            <InputDateForm
-              placeholder={`es: 09/2022`}
-              label={`Data fine assicurazione`}
-              name={`endDate`}
-              control={control}
-              withWrapper
-            />
-            <InputDateForm
-              placeholder={`es: 09/2022`}
-              label={`Data sospensione assicurazione`}
-              name={`suspensionDate`}
-              control={control}
-              withWrapper
-            />
-            <InputDateForm
-              placeholder={`es: 09/2022`}
-              label={`Data riattivazione assicurazione`}
-              name={`reactivationDate`}
-              control={control}
-              withWrapper
-            />
+          <div className="flex flex-wrap w-full mb-3">
+            <div className="flex gap-10">
+              <InputDateForm
+                placeholder={`es: 09/2022`}
+                label={`Data inizio`}
+                name={`startDate`}
+                control={control}
+                withWrapper
+                required
+              />
+              <InputDateForm
+                placeholder={`es: 09/2022`}
+                label={`Data fine`}
+                name={`endDate`}
+                control={control}
+                withWrapper
+                required
+              />
+            </div>
+
+            <div className="flex gap-10">
+              <InputDateForm
+                placeholder={`es: 09/2022`}
+                label={`Data sospensione`}
+                name={`suspensionDate`}
+                control={control}
+                withWrapper
+              />
+              <InputDateForm
+                placeholder={`es: 09/2022`}
+                label={`Data riattivazione`}
+                name={`reactivationDate`}
+                control={control}
+                withWrapper
+              />
+            </div>
           </div>
 
           <div className="flex justify-end gap-4">
@@ -196,6 +247,7 @@ const InsuranceFormContent = ({ insuranceData }: IInsuranceForm) => {
             </Button>
           </div>
         </form>
+        <DevTool control={control} />
       </>
     </FormLayout>
   )

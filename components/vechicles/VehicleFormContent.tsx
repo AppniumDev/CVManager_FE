@@ -26,7 +26,10 @@ import {
   createVehicleMutation,
   updateVehicleMutation,
 } from '../../src/graphql/mutations/vehicles.mutations'
-import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import {
+  ClipboardDocumentListIcon,
+  PlusCircleIcon,
+} from '@heroicons/react/24/outline'
 import {
   CreateVehicleMutation,
   CreateVehicleMutationVariables,
@@ -39,6 +42,7 @@ import {
   getVehicleByIdQuery,
 } from '../../src/graphql/queries/vehicles.queries'
 import { MODALS_SECONDARY } from '../common/ModalSwitcher/SecondaryModalSwitcher'
+import { SectionEntity } from '../common/Form/SectionEntity'
 
 export interface IVehicleForm {
   vehicleData?: SingleVehicleQuery['vehiclesByPk']
@@ -180,6 +184,10 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
     dispatch(closePrimaryModal())
   }
 
+  console.log('Vehicle data', vehicleData)
+
+  type VehicleType = SingleVehicleQuery['vehiclesByPk']
+
   return (
     <FormLayout title={formTitle} width="w-8/12" additionalClassname={''}>
       <>
@@ -215,7 +223,30 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
           </div>
           <div className="flex">
             <div className="flex flex-col w-full gap-4">
-              <Typography variant="h6" component="h2" className="mb-4">
+              <SectionEntity
+                title={'Assicurazioni'}
+                subtitle={''}
+                icon={ClipboardDocumentListIcon}
+                data={vehicleData?.insurances as any[]}
+                actionClickEdit={(id: string) => {
+                  dispatch(
+                    openSecondaryModal({
+                      modal: MODALS_SECONDARY.INSURANCE_FORM,
+                      mode: 'edit',
+                      entityId: id,
+                    })
+                  )
+                }}
+                actionClickNew={() => {
+                  dispatch(
+                    openSecondaryModal({
+                      modal: MODALS_SECONDARY.INSURANCE_FORM,
+                      mode: 'add',
+                    })
+                  )
+                }}
+              />
+              {/* <Typography variant="h6" component="h2" className="mb-4">
                 Assicurazioni
               </Typography>
               <div className="flex w-full gap-8 pt-4 mb-3">
@@ -245,7 +276,7 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
                     <PlusCircleIcon className="self-center w-10 h-10 text-sm font-light text-blue-300 group-hover:text-white" />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <Typography variant="h6" component="h2" className="mb-4">
                 Revisioni
@@ -362,7 +393,7 @@ const VehicleFormContent = ({ vehicleData }: IVehicleForm) => {
             </Button>
           </div>
         </form>
-        <DevTool control={control} />
+        {/* <DevTool control={control} /> */}
         <DashboardModal
           uppy={uppy}
           open={isUppyModalOpen}
