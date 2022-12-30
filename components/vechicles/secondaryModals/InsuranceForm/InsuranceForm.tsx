@@ -29,6 +29,7 @@ const InsuranceModal = () => {
   const { data: insuranceData, loading } = useQuery<SingleInsuranceQuery>(
     getInsuranceByIdQuery,
     {
+      fetchPolicy: 'network-only',
       variables,
       skip: !isFormEdit,
     }

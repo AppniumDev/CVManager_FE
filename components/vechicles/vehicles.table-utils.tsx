@@ -1,6 +1,5 @@
-import { format } from 'date-fns'
 import { GridColDef, GridColumns } from '@mui/x-data-grid'
-import { Chip, Button } from '@mui/material'
+import { Button, Chip } from '@mui/material'
 import { MODALS_PRIMARY } from '../common/ModalSwitcher/PrimaryModalSwitcher'
 import { openPrimaryModal } from '../../src/state/appViewSlice'
 import { AppDispatch } from '../../src/state/store'
@@ -13,14 +12,14 @@ export interface IVechiclesColumns {
 export const vehiclesColumns = ({
   dispatch,
 }: IVechiclesColumns): GridColumns<AllVehiclesQuery['vehicles'][number]> => {
-  const columns: GridColDef<AllVehiclesQuery['vehicles'][number]>[] = [
+  return [
     { field: 'name', headerName: 'Nome Veicolo', flex: 1 },
     {
       field: 'licensePlate',
       headerName: 'Targa Veicolo',
       flex: 1,
       renderCell({ value }) {
-        return <Chip color="secondary" label={value} />
+        return <Chip color="primary" label={value} />
       },
     },
     {
@@ -65,6 +64,4 @@ export const vehiclesColumns = ({
       },
     },
   ]
-
-  return columns
 }

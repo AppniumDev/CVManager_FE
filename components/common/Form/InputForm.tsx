@@ -33,6 +33,20 @@ const InputForm = <T extends FieldValues>({
         helperText={isErrored ? fieldState.error?.message : ''}
         required={required}
         {...field}
+        onChange={(e) => {
+          const value = e.target.value
+          console.log('value', {
+            value,
+            checkDot: value.charAt(value.length - 1),
+            checkComma: value.charAt(value.length - 1),
+          })
+
+          if (money) {
+            field.onChange(parseFloat(value.replace(",", ".")))
+          } else {
+            field.onChange(value)
+          }
+        }}
         inputRef={field.ref}
         type={money ? 'number' : 'text'}
         InputProps={

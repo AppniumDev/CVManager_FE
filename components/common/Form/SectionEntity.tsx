@@ -70,8 +70,8 @@ const SectionEntity = ({
       </Typography>
       <div className="flex w-full gap-8 pt-4 mb-3">
         <div className="flex items-center justify-start">
-          <div className="flex items-center gap-4">
-            {data.map((item, index) => (
+          <div className="flex items-center gap-3 wrap max-w-xl">
+            {data && data.map((item, index) => (
               <SectionEntityItem
                 item={item}
                 icon={icon}

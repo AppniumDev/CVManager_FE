@@ -18,3 +18,11 @@ export const updateInsuranceMutation = gql`
     }
   }
 `
+
+export const deleteInsuranceMutation = gql`
+  mutation DeleteInsurance($id: Int!) {
+    deleteInsurancesByPk(id: $id) {
+      id
+    }
+  }
+`

@@ -14,7 +14,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   date: any;
-  money: any;
+  numeric: any;
   timestamptz: any;
 };
 
@@ -44,11 +44,11 @@ export type Insurances = {
   __typename?: 'Insurances';
   createdAt: Scalars['timestamptz'];
   endDate: Scalars['date'];
-  firstInstallment?: Maybe<Scalars['money']>;
+  firstInstallment?: Maybe<Scalars['numeric']>;
   id: Scalars['Int'];
-  price?: Maybe<Scalars['money']>;
+  price?: Maybe<Scalars['numeric']>;
   reactivationDate?: Maybe<Scalars['date']>;
-  secondInstallment?: Maybe<Scalars['money']>;
+  secondInstallment?: Maybe<Scalars['numeric']>;
   startDate: Scalars['date'];
   suspensionDate?: Maybe<Scalars['date']>;
   title: Scalars['String'];
@@ -127,11 +127,11 @@ export type InsurancesBoolExp = {
   _or?: InputMaybe<Array<InsurancesBoolExp>>;
   createdAt?: InputMaybe<TimestamptzComparisonExp>;
   endDate?: InputMaybe<DateComparisonExp>;
-  firstInstallment?: InputMaybe<MoneyComparisonExp>;
+  firstInstallment?: InputMaybe<NumericComparisonExp>;
   id?: InputMaybe<IntComparisonExp>;
-  price?: InputMaybe<MoneyComparisonExp>;
+  price?: InputMaybe<NumericComparisonExp>;
   reactivationDate?: InputMaybe<DateComparisonExp>;
-  secondInstallment?: InputMaybe<MoneyComparisonExp>;
+  secondInstallment?: InputMaybe<NumericComparisonExp>;
   startDate?: InputMaybe<DateComparisonExp>;
   suspensionDate?: InputMaybe<DateComparisonExp>;
   title?: InputMaybe<StringComparisonExp>;
@@ -148,10 +148,10 @@ export enum InsurancesConstraint {
 
 /** input type for incrementing numeric columns in table "insurances" */
 export type InsurancesIncInput = {
-  firstInstallment?: InputMaybe<Scalars['money']>;
+  firstInstallment?: InputMaybe<Scalars['numeric']>;
   id?: InputMaybe<Scalars['Int']>;
-  price?: InputMaybe<Scalars['money']>;
-  secondInstallment?: InputMaybe<Scalars['money']>;
+  price?: InputMaybe<Scalars['numeric']>;
+  secondInstallment?: InputMaybe<Scalars['numeric']>;
   vehicleId?: InputMaybe<Scalars['Int']>;
 };
 
@@ -159,11 +159,11 @@ export type InsurancesIncInput = {
 export type InsurancesInsertInput = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   endDate?: InputMaybe<Scalars['date']>;
-  firstInstallment?: InputMaybe<Scalars['money']>;
+  firstInstallment?: InputMaybe<Scalars['numeric']>;
   id?: InputMaybe<Scalars['Int']>;
-  price?: InputMaybe<Scalars['money']>;
+  price?: InputMaybe<Scalars['numeric']>;
   reactivationDate?: InputMaybe<Scalars['date']>;
-  secondInstallment?: InputMaybe<Scalars['money']>;
+  secondInstallment?: InputMaybe<Scalars['numeric']>;
   startDate?: InputMaybe<Scalars['date']>;
   suspensionDate?: InputMaybe<Scalars['date']>;
   title?: InputMaybe<Scalars['String']>;
@@ -177,11 +177,11 @@ export type InsurancesMaxFields = {
   __typename?: 'InsurancesMaxFields';
   createdAt?: Maybe<Scalars['timestamptz']>;
   endDate?: Maybe<Scalars['date']>;
-  firstInstallment?: Maybe<Scalars['money']>;
+  firstInstallment?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['money']>;
+  price?: Maybe<Scalars['numeric']>;
   reactivationDate?: Maybe<Scalars['date']>;
-  secondInstallment?: Maybe<Scalars['money']>;
+  secondInstallment?: Maybe<Scalars['numeric']>;
   startDate?: Maybe<Scalars['date']>;
   suspensionDate?: Maybe<Scalars['date']>;
   title?: Maybe<Scalars['String']>;
@@ -194,11 +194,11 @@ export type InsurancesMinFields = {
   __typename?: 'InsurancesMinFields';
   createdAt?: Maybe<Scalars['timestamptz']>;
   endDate?: Maybe<Scalars['date']>;
-  firstInstallment?: Maybe<Scalars['money']>;
+  firstInstallment?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['money']>;
+  price?: Maybe<Scalars['numeric']>;
   reactivationDate?: Maybe<Scalars['date']>;
-  secondInstallment?: Maybe<Scalars['money']>;
+  secondInstallment?: Maybe<Scalars['numeric']>;
   startDate?: Maybe<Scalars['date']>;
   suspensionDate?: Maybe<Scalars['date']>;
   title?: Maybe<Scalars['String']>;
@@ -276,11 +276,11 @@ export enum InsurancesSelectColumn {
 export type InsurancesSetInput = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   endDate?: InputMaybe<Scalars['date']>;
-  firstInstallment?: InputMaybe<Scalars['money']>;
+  firstInstallment?: InputMaybe<Scalars['numeric']>;
   id?: InputMaybe<Scalars['Int']>;
-  price?: InputMaybe<Scalars['money']>;
+  price?: InputMaybe<Scalars['numeric']>;
   reactivationDate?: InputMaybe<Scalars['date']>;
-  secondInstallment?: InputMaybe<Scalars['money']>;
+  secondInstallment?: InputMaybe<Scalars['numeric']>;
   startDate?: InputMaybe<Scalars['date']>;
   suspensionDate?: InputMaybe<Scalars['date']>;
   title?: InputMaybe<Scalars['String']>;
@@ -321,10 +321,10 @@ export type InsurancesStddev_SampFields = {
 /** aggregate sum on columns */
 export type InsurancesSumFields = {
   __typename?: 'InsurancesSumFields';
-  firstInstallment?: Maybe<Scalars['money']>;
+  firstInstallment?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['money']>;
-  secondInstallment?: Maybe<Scalars['money']>;
+  price?: Maybe<Scalars['numeric']>;
+  secondInstallment?: Maybe<Scalars['numeric']>;
   vehicleId?: Maybe<Scalars['Int']>;
 };
 
@@ -700,17 +700,17 @@ export type MaintenancesVarianceFields = {
   vehicleId?: Maybe<Scalars['Float']>;
 };
 
-/** Boolean expression to compare columns of type "money". All fields are combined with logical 'AND'. */
-export type MoneyComparisonExp = {
-  _eq?: InputMaybe<Scalars['money']>;
-  _gt?: InputMaybe<Scalars['money']>;
-  _gte?: InputMaybe<Scalars['money']>;
-  _in?: InputMaybe<Array<Scalars['money']>>;
+/** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
+export type NumericComparisonExp = {
+  _eq?: InputMaybe<Scalars['numeric']>;
+  _gt?: InputMaybe<Scalars['numeric']>;
+  _gte?: InputMaybe<Scalars['numeric']>;
+  _in?: InputMaybe<Array<Scalars['numeric']>>;
   _isNull?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['money']>;
-  _lte?: InputMaybe<Scalars['money']>;
-  _neq?: InputMaybe<Scalars['money']>;
-  _nin?: InputMaybe<Array<Scalars['money']>>;
+  _lt?: InputMaybe<Scalars['numeric']>;
+  _lte?: InputMaybe<Scalars['numeric']>;
+  _neq?: InputMaybe<Scalars['numeric']>;
+  _nin?: InputMaybe<Array<Scalars['numeric']>>;
 };
 
 /** column ordering options */
@@ -1451,11 +1451,11 @@ export type Insurances_StreamCursorInput = {
 export type Insurances_StreamCursorValueInput = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   endDate?: InputMaybe<Scalars['date']>;
-  firstInstallment?: InputMaybe<Scalars['money']>;
+  firstInstallment?: InputMaybe<Scalars['numeric']>;
   id?: InputMaybe<Scalars['Int']>;
-  price?: InputMaybe<Scalars['money']>;
+  price?: InputMaybe<Scalars['numeric']>;
   reactivationDate?: InputMaybe<Scalars['date']>;
-  secondInstallment?: InputMaybe<Scalars['money']>;
+  secondInstallment?: InputMaybe<Scalars['numeric']>;
   startDate?: InputMaybe<Scalars['date']>;
   suspensionDate?: InputMaybe<Scalars['date']>;
   title?: InputMaybe<Scalars['String']>;
@@ -2256,6 +2256,13 @@ export type UpdateInsuranceMutationVariables = Exact<{
 
 export type UpdateInsuranceMutation = { __typename?: 'mutation_root', updateInsurancesByPk?: { __typename?: 'Insurances', id: number } | null };
 
+export type DeleteInsuranceMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteInsuranceMutation = { __typename?: 'mutation_root', deleteInsurancesByPk?: { __typename?: 'Insurances', id: number } | null };
+
 export type CreateVehicleMutationVariables = Exact<{
   object: VehiclesInsertInput;
 }>;
@@ -2363,6 +2370,39 @@ export function useUpdateInsuranceMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateInsuranceMutationHookResult = ReturnType<typeof useUpdateInsuranceMutation>;
 export type UpdateInsuranceMutationResult = Apollo.MutationResult<UpdateInsuranceMutation>;
 export type UpdateInsuranceMutationOptions = Apollo.BaseMutationOptions<UpdateInsuranceMutation, UpdateInsuranceMutationVariables>;
+export const DeleteInsuranceDocument = gql`
+    mutation DeleteInsurance($id: Int!) {
+  deleteInsurancesByPk(id: $id) {
+    id
+  }
+}
+    `;
+export type DeleteInsuranceMutationFn = Apollo.MutationFunction<DeleteInsuranceMutation, DeleteInsuranceMutationVariables>;
+
+/**
+ * __useDeleteInsuranceMutation__
+ *
+ * To run a mutation, you first call `useDeleteInsuranceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInsuranceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInsuranceMutation, { data, loading, error }] = useDeleteInsuranceMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteInsuranceMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInsuranceMutation, DeleteInsuranceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInsuranceMutation, DeleteInsuranceMutationVariables>(DeleteInsuranceDocument, options);
+      }
+export type DeleteInsuranceMutationHookResult = ReturnType<typeof useDeleteInsuranceMutation>;
+export type DeleteInsuranceMutationResult = Apollo.MutationResult<DeleteInsuranceMutation>;
+export type DeleteInsuranceMutationOptions = Apollo.BaseMutationOptions<DeleteInsuranceMutation, DeleteInsuranceMutationVariables>;
 export const CreateVehicleDocument = gql`
     mutation CreateVehicle($object: VehiclesInsertInput!) {
   insertVehiclesOne(object: $object) {

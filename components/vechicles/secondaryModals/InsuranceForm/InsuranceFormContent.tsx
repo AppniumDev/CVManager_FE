@@ -11,6 +11,7 @@ import { InputForm } from '../../../common/Form/InputForm'
 import {
   CreateInsuranceMutation,
   CreateInsuranceMutationVariables,
+  DeleteInsuranceMutation,
   SingleInsuranceQuery,
   UpdateInsuranceMutation,
   UpdateInsuranceMutationVariables,
@@ -19,14 +20,19 @@ import { DevTool } from '@hookform/devtools'
 import { useMutation } from '@apollo/client'
 import {
   createInsuranceMutation,
+  deleteInsuranceMutation,
   updateInsuranceMutation,
 } from '../../../../src/graphql/mutations/insurances.mutation'
-import { getAllInsurancesQuery } from '../../../../src/graphql/queries/insurances.queries'
+import {
+  getAllInsurancesQuery,
+  getInsuranceByIdQuery,
+} from '../../../../src/graphql/queries/insurances.queries'
 import {
   decodePrice,
   encodePrice,
   isRequiredYup,
 } from '../../../../src/utils/formUtils'
+import { getVehicleByIdQuery } from '../../../../src/graphql/queries/vehicles.queries'
 
 export interface IInsuranceForm {
   insuranceData?: SingleInsuranceQuery['insurancesByPk']
@@ -40,8 +46,8 @@ const formValidationSchema = Yup.object().shape({
   secondInstallment: Yup.number(),
   startDate: Yup.date().required(),
   endDate: Yup.date().required(),
-  suspensionDate: Yup.date(),
-  reactivationDate: Yup.date(),
+  suspensionDate: Yup.date().nullable(),
+  reactivationDate: Yup.date().nullable(),
 })
 
 const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
@@ -96,6 +102,16 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
     isValid,
     dirtyFields,
     isValidating,
+    errorsGet: {
+      title: getFieldState('title').error,
+      price: getFieldState('price').error,
+      firstInstallment: getFieldState('firstInstallment').error,
+      secondInstallment: getFieldState('secondInstallment').error,
+      startDate: getFieldState('startDate').error,
+      endDate: getFieldState('endDate').error,
+      suspensionDate: getFieldState('suspensionDate').error,
+      reactivationDate: getFieldState('reactivationDate').error,
+    },
     values: getValues(),
   })
 
@@ -118,6 +134,9 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
     useMutation<CreateInsuranceMutation>(createInsuranceMutation)
   const [updateInsurance] = useMutation<UpdateInsuranceMutation>(
     updateInsuranceMutation
+  )
+  const [deleteInsurance] = useMutation<DeleteInsuranceMutation>(
+    deleteInsuranceMutation
   )
 
   // Submit form function
@@ -143,16 +162,29 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
         }
         await updateInsurance({
           variables: variablesUpdateInsurance,
-          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllVehicles'],
+          refetchQueries: (data) => {
+            return [
+              {
+                query: getInsuranceByIdQuery,
+                variables: { insuranceId: insuranceData?.id },
+              },
+            ]
+          },
         })
       } else {
         const variablesCreateInsurance: CreateInsuranceMutationVariables = {
           object: {
             vehicleId: vehicleId,
             title: getValues('title'),
-            firstInstallment: getValues('firstInstallment'),
-            secondInstallment: getValues('secondInstallment'),
-            price: getValues('price'),
+            firstInstallment: getValues('firstInstallment')
+              ? getValues('firstInstallment') * 100
+              : getValues('firstInstallment'),
+            secondInstallment: getValues('secondInstallment')
+              ? getValues('secondInstallment') * 100
+              : getValues('secondInstallment'),
+            price: getValues('price')
+              ? getValues('price') * 100
+              : getValues('price'),
             startDate: getValues('startDate'),
             endDate: getValues('endDate'),
             suspensionDate: getValues('suspensionDate'),
@@ -161,12 +193,37 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
         }
         await createInsurance({
           variables: variablesCreateInsurance,
-          refetchQueries: [{ query: getAllInsurancesQuery }, 'AllVehicles'],
+          refetchQueries: (data) => {
+            return [
+              {
+                query: getVehicleByIdQuery,
+                variables: { vehicleId: vehicleId },
+              },
+            ]
+          },
         })
       }
     } catch (e) {
       console.log(e)
     }
+
+    dispatch(closeSecondaryModal())
+  }
+
+  const onDelete = async () => {
+    await deleteInsurance({
+      variables: {
+        id: insuranceData?.id,
+      },
+      refetchQueries: (data) => {
+        return [
+          {
+            query: getVehicleByIdQuery,
+            variables: { vehicleId: vehicleId },
+          },
+        ]
+      },
+    })
 
     dispatch(closeSecondaryModal())
   }
@@ -265,18 +322,26 @@ const InsuranceFormContent = ({ insuranceData, vehicleId }: IInsuranceForm) => {
               />
             </div>
           </div>
-
-          <div className="flex justify-end gap-4">
-            <Button onClick={() => dispatch(closeSecondaryModal())}>
-              {'Chiudi'}
-            </Button>
-            <Button
-              disabled={!isValid || !isDirty}
-              variant="contained"
-              type="submit"
-            >
-              {isFormEdit ? 'Salva Assicurazione' : 'Crea Assicurazione'}
-            </Button>
+          <div className="flex justify-between">
+            {isFormEdit && (
+              <div className="flex justify-end gap-4">
+                <Button color="error" onClick={() => onDelete()}>
+                  {'Elimina assicurazione'}
+                </Button>
+              </div>
+            )}
+            <div className="flex justify-end gap-4">
+              <Button onClick={() => dispatch(closeSecondaryModal())}>
+                {'Chiudi'}
+              </Button>
+              <Button
+                disabled={!isValid || !isDirty}
+                variant="contained"
+                type="submit"
+              >
+                {isFormEdit ? 'Salva Assicurazione' : 'Crea Assicurazione'}
+              </Button>
+            </div>
           </div>
         </form>
         <DevTool control={control} />

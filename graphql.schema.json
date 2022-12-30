@@ -231,7 +231,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -259,7 +259,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -283,7 +283,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -958,7 +958,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "MoneyComparisonExp",
+              "name": "NumericComparisonExp",
               "ofType": null
             },
             "defaultValue": null,
@@ -982,7 +982,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "MoneyComparisonExp",
+              "name": "NumericComparisonExp",
               "ofType": null
             },
             "defaultValue": null,
@@ -1006,7 +1006,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "MoneyComparisonExp",
+              "name": "NumericComparisonExp",
               "ofType": null
             },
             "defaultValue": null,
@@ -1118,7 +1118,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -1142,7 +1142,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -1154,7 +1154,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -1213,7 +1213,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -1237,7 +1237,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -1261,7 +1261,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -1380,7 +1380,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1404,7 +1404,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1428,7 +1428,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1535,7 +1535,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1559,7 +1559,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1583,7 +1583,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2081,7 +2081,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -2105,7 +2105,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -2129,7 +2129,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -2425,7 +2425,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2449,7 +2449,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2461,7 +2461,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "isDeprecated": false,
@@ -5023,8 +5023,8 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "MoneyComparisonExp",
-        "description": "Boolean expression to compare columns of type \"money\". All fields are combined with logical 'AND'.",
+        "name": "NumericComparisonExp",
+        "description": "Boolean expression to compare columns of type \"numeric\". All fields are combined with logical 'AND'.",
         "fields": null,
         "inputFields": [
           {
@@ -5032,7 +5032,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -5044,7 +5044,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -5056,7 +5056,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -5074,7 +5074,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "money",
+                  "name": "numeric",
                   "ofType": null
                 }
               }
@@ -5100,7 +5100,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -5112,7 +5112,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -5124,7 +5124,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -5142,7 +5142,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "money",
+                  "name": "numeric",
                   "ofType": null
                 }
               }
@@ -11243,7 +11243,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -11267,7 +11267,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -11291,7 +11291,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "money",
+              "name": "numeric",
               "ofType": null
             },
             "defaultValue": null,
@@ -12379,16 +12379,6 @@
             "deprecationReason": null
           }
         ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "money",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
@@ -13581,6 +13571,16 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "numeric",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
